@@ -39,7 +39,7 @@ id = "Chemio9"             # Your id / username / handle
 bio = "him"                # Your bio
 avatar = "avatar.webp" # Your avatar
 links = [                  # Your links
-    { name = "GitHub", icon = "github", url = "https://github.com/chenrry666" },
+    { name = "GitHub", icon = "github", url = "https://github.com/chemio9" },
     # { name = "Twitter", icon = "twitter", url = "https://twitter.com/<your-username>" },
     { name = "Email", icon = "email", url = "mailto:chengruichen3@gmail.com" },
 ]
