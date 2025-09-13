@@ -1,5 +1,5 @@
 ---
-title: 给博客换了个主题
+title: Migrate My Blog to Astro
 description: ""
 pubDate: 2025-09-13
 lastModDate: ''
@@ -77,4 +77,4 @@ export default defineConfig({
 ```
 
 > [!NOTE]
-> TODO
+> TODO: unfinished
