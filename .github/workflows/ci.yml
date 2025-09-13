@@ -24,9 +24,8 @@ jobs:
         node: [lts/*]
       fail-fast: false
     env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_LOADER }}
+      GITHUB_TOKEN: ${{ secrets.ASTRO_BUILD_PAT }}
 
-    if: github.repository == 'lin-stephanie/astro-antfustyle-theme'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
 
@@ -41,8 +40,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Get pnpm store directory
         shell: bash
