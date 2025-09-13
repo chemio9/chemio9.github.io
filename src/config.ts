@@ -62,18 +62,18 @@ export const UI: Ui = {
       displayMode: 'alwaysIcon',
       icon: 'i-uil-github-alt',
     },
-    // {
-    //   link: 'https://x.com/astrodotbuild',
-    //   title: 'Astro on Twitter',
-    //   displayMode: 'alwaysIcon',
-    //   icon: 'i-ri-twitter-x-fill',
-    // },
-    // {
-    //   link: 'https://bsky.app/profile/astro.build',
-    //   title: 'Astro on Bluesky',
-    //   displayMode: 'alwaysIcon',
-    //   icon: 'i-meteor-icons-bluesky',
-    // },
+    {
+      link: 'https://x.com/chenrry179317',
+      title: 'Twitter',
+      displayMode: 'alwaysIcon',
+      icon: 'i-ri-twitter-x-fill',
+    },
+    {
+      link: 'https://bsky.app/profile/chemio9.bsky.social',
+      title: 'Bluesky',
+      displayMode: 'alwaysIcon',
+      icon: 'i-meteor-icons-bluesky',
+    },
   ],
   navBarLayout: {
     left: [],
@@ -139,7 +139,7 @@ export const FEATURES: Features = {
   toc: [
     true,
     {
-      minHeadingLevel: 2,
+      minHeadingLevel: 1,
       maxHeadingLevel: 4,
       displayPosition: 'left',
       displayMode: 'content',
@@ -148,8 +148,8 @@ export const FEATURES: Features = {
   share: [
     true,
     {
-      twitter: [false, '@ste7lin'],
-      bluesky: [false, '@ste7lin.bsky.social'],
+      twitter: [true, '@chenrry179317'],
+      bluesky: [true, '@chemio9.bsky.social'],
       mastodon: false,
       facebook: false,
       pinterest: false,
