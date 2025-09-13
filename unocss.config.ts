@@ -60,6 +60,10 @@ export default defineConfig({
       // exclude files
       // exclude: []
     },
+    filesystem: [
+      './src/content/projects/data.json',
+      './src/{content,pages}/**/*.{mdx,md}',
+    ],
   },
 
   extractors: [
