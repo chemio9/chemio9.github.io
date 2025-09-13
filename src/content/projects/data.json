@@ -22,6 +22,21 @@
   },
 
   {
+    "id": "LaTeX",
+    "link": "https://github.com/latex3/latex2e",
+    "desc": "LaTeX is a high-quality typesetting system and the de facto standard for the communication and publication of scientific documents.",
+    "icon": "i-devicon-latex",
+    "category": "Documentation"
+  },
+
+  {
+    "id": "vue",
+    "link": "https://github.com/vuejs/core",
+    "desc": "Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.",
+    "icon": "i-devicon-vuejs",
+    "category": "Frontend Related"
+  },
+  {
     "id": "astro",
     "link": "https://github.com/withastro/astro",
     "desc": "The web framework for content-driven websites",
@@ -44,32 +59,10 @@
     "category": "Frontend Related"
   },
   {
-    "id": "@unocss/reset",
-    "link": "https://www.npmjs.com/package/@unocss/reset",
-    "desc": "UnoCSS reset styles",
-    "icon": "i-ri-reset-right-fill",
-    "category": "Frontend Related"
-  },
-  {
     "id": "@iconify/json",
     "link": "https://github.com/iconify/iconify",
     "desc": "Iconify JSON icon data",
     "icon": "i-simple-icons-iconify",
-    "category": "Frontend Related"
-  },
-
-  {
-    "id": "remark-directive",
-    "link": "https://github.com/remarkjs/remark-directive",
-    "desc": "Remark plugin for custom Markdown directives",
-    "icon": "i-mdi-magic",
-    "category": "Frontend Related"
-  },
-  {
-    "id": "remark-directive-sugar",
-    "link": "https://github.com/lin-stephanie/remark-directive-sugar",
-    "desc": "Remark plugin to provide predefined directives",
-    "icon": "i-ep-sugar",
     "category": "Frontend Related"
   },
 
@@ -86,6 +79,13 @@
     "link": "https://github.com/antfu/antfu.me",
     "desc": "Anthony Fu's personal website",
     "icon": "i-mynaui-letter-a-waves",
+    "category": "Credits"
+  },
+  {
+    "id": "lin-stephanie/astro-antfustyle-theme",
+    "link": "https://github.com/lin-stephanie/astro-antfustyle-theme",
+    "desc": "A flexible and feature-rich Astro theme for developers and creators.",
+    "icon": "i-gridicons-themes",
     "category": "Credits"
   },
   {
