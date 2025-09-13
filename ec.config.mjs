@@ -9,7 +9,7 @@ export default defineEcConfig({
   defaultProps: {
     wrap: false,
     preserveIndent: true,
-    showLineNumbers: false,
+    showLineNumbers: true,
     collapseStyle: 'collapsible-auto',
   },
   minSyntaxHighlightingColorContrast: 0,

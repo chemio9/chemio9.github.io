@@ -1,11 +1,12 @@
 import { base } from 'astro:config/server'
+import { SITE } from '~/config'
 
 export async function GET() {
   const manifest = {
-    name: 'Astro AntfuStyle Theme',
-    short_name: 'AntfuStyle',
+    name: 'Chemio9\'s Blog',
+    short_name: 'Chemio9 Blog',
     description:
-      'A customizable, feature-rich Astro theme for blog and portfolio',
+      SITE.description,
     icons: [
       { src: `${base}icon-192.png`, type: 'image/png', sizes: '192x192' },
       { src: `${base}icon-512.png`, type: 'image/png', sizes: '512x512' },

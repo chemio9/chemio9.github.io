@@ -3,10 +3,10 @@ import type { Site, Ui, Features } from './types'
 export const SITE: Site = {
   website: 'https://astro-antfustyle-theme.vercel.app/',
   base: '/',
-  title: 'Astro AntfuStyle Theme',
+  title: '@Chemio9\'s Blog',
   description:
-    'A customizable, feature-rich Astro theme for blog and portfolio creation',
-  author: 'Stephanie Lin',
+    'Recording my life.',
+  author: 'Chemio9',
   lang: 'en',
   ogLocale: 'en_US',
   imageDomains: ['cdn.bsky.app', 'images.unsplash.com'],
@@ -57,23 +57,23 @@ export const UI: Ui = {
   ],
   socialLinks: [
     {
-      link: 'https://github.com/lin-stephanie/astro-antfustyle-theme',
-      title: 'AntfuStyle on Github',
+      link: 'https://github.com/chemio9',
+      title: 'Github Profile',
       displayMode: 'alwaysIcon',
       icon: 'i-uil-github-alt',
     },
-    {
-      link: 'https://x.com/astrodotbuild',
-      title: 'Astro on Twitter',
-      displayMode: 'alwaysIcon',
-      icon: 'i-ri-twitter-x-fill',
-    },
-    {
-      link: 'https://bsky.app/profile/astro.build',
-      title: 'Astro on Bluesky',
-      displayMode: 'alwaysIcon',
-      icon: 'i-meteor-icons-bluesky',
-    },
+    // {
+    //   link: 'https://x.com/astrodotbuild',
+    //   title: 'Astro on Twitter',
+    //   displayMode: 'alwaysIcon',
+    //   icon: 'i-ri-twitter-x-fill',
+    // },
+    // {
+    //   link: 'https://bsky.app/profile/astro.build',
+    //   title: 'Astro on Bluesky',
+    //   displayMode: 'alwaysIcon',
+    //   icon: 'i-meteor-icons-bluesky',
+    // },
   ],
   navBarLayout: {
     left: [],
@@ -99,9 +99,9 @@ export const UI: Ui = {
   },
   githubView: {
     monorepos: [
-      'withastro/astro',
-      'withastro/starlight',
-      'lin-stephanie/astro-loaders',
+      // 'withastro/astro',
+      // 'withastro/starlight',
+      // 'lin-stephanie/astro-loaders',
     ],
     mainLogoOverrides: [
       [/starlight/, 'https://starlight.astro.build/favicon.svg'],
@@ -114,11 +114,11 @@ export const UI: Ui = {
     ],
   },
   externalLink: {
-    newTab: false,
-    cursorType: '',
-    showNewTabIcon: false,
+    newTab: true,
+    cursorType: 'pointer',
+    showNewTabIcon: true,
   },
-  postMetaStyle: 'minimal',
+  postMetaStyle: 'icon',
 }
 
 /**
@@ -148,15 +148,15 @@ export const FEATURES: Features = {
   share: [
     true,
     {
-      twitter: [true, '@ste7lin'],
-      bluesky: [true, '@ste7lin.bsky.social'],
+      twitter: [false, '@ste7lin'],
+      bluesky: [false, '@ste7lin.bsky.social'],
       mastodon: false,
       facebook: false,
       pinterest: false,
       reddit: false,
-      telegram: false,
+      telegram: true,
       whatsapp: false,
-      email: false,
+      email: true,
     },
   ],
   giscus: [
