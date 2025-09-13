@@ -68,9 +68,7 @@ export default defineConfig({
       extract(ctx) {
         if (!ctx.id)
           return undefined
-        console.log(ctx.id)
         if (ctx.id?.endsWith("projects/data.json")) {
-          console.log(ctx.code)
           try {
             return (JSON.parse(ctx.code) as ProjectSchema[]).map((v) => v.icon)
           }
