@@ -3,6 +3,7 @@ title: Adding New Posts
 description: "How to create new posts in Astro AntfuStyle Theme: guidelines, tips, and tricks"
 pubDate: 2023-12-06
 lastModDate: ''
+draft: true # don't show in prod builds
 toc: true
 share: true
 giscus: true
@@ -51,33 +52,34 @@ All `.md` and `.mdx` files in the `src/content/blog/` belong to the `blog` colle
 Each post requires [YAML frontmatter](https://jekyllrb.com/docs/front-matter/) , which adds metadata at the top of Markdown/MDX files. The frontmatter fields for `blog` posts are defined by `schema: postSchema`in `src/content/schema.ts` as follows:
 
 
-| Property (* required) | Type (default)                                | Description                                                                                                                                                                                                                                                    |
-| --------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`*                    | `string`                                          | Sets the post title, limited to **60 characters**. This follows [Moz's recommendation](https://moz.com/learn/seo/title-tag), ensuring approximately 90% of titles display correctly in SERPs and preventing truncation on smaller screens or social platforms. |
-| `subtitle`                  | `string` (`''`)                                   | Provides a post subtitle. If provided, it will be displayed below the title. If not needed, leave the field as an empty string or delete it.                                                                                                                   |
-| `description`               | `string` (`''`)                                   | Provides a brief description, used in meta tags for SEO and sharing purposes. If not needed, leave the field as an empty string or delete it, and the `SITE.description` will be used directly.                                                                |
-| `pubDate`*                  | `z.coerce.date()`                                 | Specifies the publication date. See supported formats [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#examples). For example:<br>`"2023-01-10T00:00:00.000Z"`<br>`"2023-01-10"`<br>`"1/10/23"`              |
-| `lastModDate`               | `z.union([z.coerce.date(), z.literal('')])`       | Tracks the last modified date. If not needed, leave the field as an empty string or delete it.                                                                                                                                                                 |
-| `minutesRead`               | `number`                                          | Provides an estimated reading time in minutes. To auto-generate, delete the field; to hide it on the page, enter 0.                                                                                                                                            |
-| `radio`                     | `boolean` (`false`)                               | Indicates if the post includes audio content or links to an external audio source. If `true`, an icon will be added to the post item in the list.                                                                                                              |
-| `video`                     | `boolean` (`false`)                               | Indicates if the post includes video content or links to an external video source. If `true`, an icon will be added to the post item in the list.                                                                                                              |
-| `platform`                  | `string` (`''`)                                   | Specifies the platform where the audio or video content is published. If provided, the platform name will be displayed. If not needed, leave the field as an empty string or delete it.                                                                        |
-| `toc`                       | `boolean` (`true`)                                | Controls whether the table of contents (TOC) is generated for the post.                                                                                                                                                                                        |
-| `share`                     | `boolean` (`true`)                                | Controls whether social sharing options are available for the post.                                                                                                                                                                                            |
-| `ogImage`                   | `z.union([z.string(), z.boolean()])` <br>(`true`) | Specifies the Open Graph (OG) image for social media sharing. To auto-generate OG image, delete the field or set to `true`. To disable it, set the field to `false`. To use a custom image, provide the full filename from `/public/og-images/`.               |
-| `redirect`                  | `string`                                          | Defines a URL to redirect the post.                                                                                                                                                                                                                            |
-| `draft`                     | `boolean` (`false`)                               | Marks the post as a draft. If `true`, it is only visible in development and excluded from production builds.                                                                                                                                                   |
+| Property (* required) | Type (default)                                    | Description                                                                                                                                                                                                                                                    |
+|-----------------------|---------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `title`*              | `string`                                          | Sets the post title, limited to **60 characters**. This follows [Moz's recommendation](https://moz.com/learn/seo/title-tag), ensuring approximately 90% of titles display correctly in SERPs and preventing truncation on smaller screens or social platforms. |
+| `subtitle`            | `string` (`''`)                                   | Provides a post subtitle. If provided, it will be displayed below the title. If not needed, leave the field as an empty string or delete it.                                                                                                                   |
+| `description`         | `string` (`''`)                                   | Provides a brief description, used in meta tags for SEO and sharing purposes. If not needed, leave the field as an empty string or delete it, and the `SITE.description` will be used directly.                                                                |
+| `pubDate`*            | `z.coerce.date()`                                 | Specifies the publication date. See supported formats [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#examples). For example:<br>`"2023-01-10T00:00:00.000Z"`<br>`"2023-01-10"`<br>`"1/10/23"`              |
+| `lastModDate`         | `z.union([z.coerce.date(), z.literal('')])`       | Tracks the last modified date. If not needed, leave the field as an empty string or delete it.                                                                                                                                                                 |
+| `minutesRead`         | `number`                                          | Provides an estimated reading time in minutes. To auto-generate, delete the field; to hide it on the page, enter 0.                                                                                                                                            |
+| `radio`               | `boolean` (`false`)                               | Indicates if the post includes audio content or links to an external audio source. If `true`, an icon will be added to the post item in the list.                                                                                                              |
+| `video`               | `boolean` (`false`)                               | Indicates if the post includes video content or links to an external video source. If `true`, an icon will be added to the post item in the list.                                                                                                              |
+| `platform`            | `string` (`''`)                                   | Specifies the platform where the audio or video content is published. If provided, the platform name will be displayed. If not needed, leave the field as an empty string or delete it.                                                                        |
+| `toc`                 | `boolean` (`true`)                                | Controls whether the table of contents (TOC) is generated for the post.                                                                                                                                                                                        |
+| `share`               | `boolean` (`true`)                                | Controls whether social sharing options are available for the post.                                                                                                                                                                                            |
+| `ogImage`             | `z.union([z.string(), z.boolean()])` <br>(`true`) | Specifies the Open Graph (OG) image for social media sharing. To auto-generate OG image, delete the field or set to `true`. To disable it, set the field to `false`. To use a custom image, provide the full filename from `/public/og-images/`.               |
+| `redirect`            | `string`                                          | Defines a URL to redirect the post.                                                                                                                                                                                                                            |
+| `draft`               | `boolean` (`false`)                               | Marks the post as a draft. If `true`, it is only visible in development and excluded from production builds.                                                                                                                                                   |
+
 
 The theme includes a VS Code snippet for auto-generating this frontmatter (located in `.vscode/astro-antfustyle-theme.code-snippets`). Type `postFrontmatter` and press `tab` to insert it (tab completion is enabled in `.vscode/settings.json`).
 
 > [!tip]- The theme supports [experimental intellisense for content collections](https://docs.astro.build/en/reference/experimental-flags/content-intellisense/)
-> 
+>
 > Hovering over a property shows descriptions, and mismatches in types prompt warnings.
 
 > [!note]- Formatting post titles
-> 
+>
 > Auto-generated titles capitalize the first letter of each word.  If you've tried editing the auto-generated frontmatter snippet, you'll notice that the cursor reaches the title field last after tabbing through all others.
-> 
+>
 > To correctly format titles according to [The Chicago Manual of Style](https://www.chicagomanualofstyle.org/home.html), you can use the [Smart-Title-Case](https://marketplace.visualstudio.com/items?itemName=awtnb.smart-title-case) VS Code extension.
 
 ## Writing the Post
@@ -88,10 +90,10 @@ To see how basic Markdown renders, refer to the [Markdown Syntax Guide](../markd
 
 Regardless of whether you're using Markdown or MDX, _don't miss out on the [Markdown/MDX extended features](../markdown-mdx-extended-features/) supported by this theme_, including callouts (admonitions/alerts), fully-featured code blocks, image captions and links, video embeddings, styled links, and more.
 
-Additionally, the title (set by the `title` property in the YAML frontmatter) is automatically rendered as an h1. You don’t need to include the title again in the post, and it’s recommended to start with h2 headings. 
+Additionally, the title (set by the `title` property in the YAML frontmatter) is automatically rendered as an h1. You don’t need to include the title again in the post, and it’s recommended to start with h2 headings.
 
 > [!important]- TOC excludes `title` property defined in frontmatter
-> 
+>
 > Note that even if you configure `FEATURES.toc[1].minHeadingLevel` in `src/config.ts` to include `1`, the title set by the `title` property in frontmatter won't be included in the auto-generated TOC — it only includes h1 headings written in the Markdown/MDX content.
 
 ## Wrapping Up
