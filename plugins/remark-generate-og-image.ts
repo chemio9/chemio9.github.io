@@ -37,7 +37,7 @@ const satoriOptions: SatoriOptions = {
  * (`public/og-images` is equivalent to `./public/og-images` and relative to the cwd)
  */
 export function checkFileExistsInDir(path: string, filename: string) {
-  const fullPath = join(process.cwd(), path, filename)
+  const fullPath = join(import.meta.dirname, '..', path, filename)
 
   return existsSync(fullPath)
 }
@@ -127,6 +127,7 @@ function remarkGenerateOgImage() {
 
     // check filename
     const filename = file.basename
+    console.log(filename)
     if (!filename || !(filename.endsWith('.md') || filename.endsWith('.mdx')))
       return
 
