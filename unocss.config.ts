@@ -6,10 +6,10 @@ import {
   presetWebFonts,
   transformerDirectives,
   transformerVariantGroup,
+  extractorSplit,
 } from 'unocss'
 
 import { UI } from './src/config'
-import projecstData from './src/content/projects/data.json'
 
 import type {
   IconNavItem,
@@ -17,6 +17,7 @@ import type {
   IconSocialItem,
   ResponsiveSocialItem,
 } from './src/types'
+import type { ProjectSchema } from '~/content/schema'
 
 const { internalNavs, socialLinks, githubView } = UI
 const navIcons = internalNavs
@@ -34,7 +35,7 @@ const socialIcons = socialLinks
   )
   .map((item) => (item as IconSocialItem | ResponsiveSocialItem).icon)
 
-const projectIcons = projecstData.map((item) => item.icon)
+// const projectIcons = projecstData.map((item) => item.icon)
 
 const githubVersionColor: Record<string, string> = {
   major: 'bg-rose/15 text-rose-7 dark:text-rose-3',
@@ -50,8 +51,36 @@ const githubSubLogos = githubView.subLogoMatches.map((item) => item[1])
 export default defineConfig({
   // Astro 5 no longer pipes `src/content/**/*.{md,mdx}` through Vite
   content: {
-    filesystem: ['./src/{content,pages}/**/*.{md,mdx}'],
+    pipeline: {
+      include: [
+        // the default
+        /\.(vue|svelte|[jt]sx|vine.ts|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        './src/content/projects/data.json',
+      ],
+      // exclude files
+      // exclude: []
+    },
   },
+
+  extractors: [
+    {
+      name: "antfustyle-astro-theme/data-extractor",
+      extract(ctx) {
+        if (!ctx.id)
+          return undefined
+        console.log(ctx.id)
+        if (ctx.id?.endsWith("projects/data.json")) {
+          console.log(ctx.code)
+          try {
+            return (JSON.parse(ctx.code) as ProjectSchema[]).map((v) => v.icon)
+          }
+          // eslint-disable-next-line no-empty
+          catch { }
+        }
+      },
+    },
+    extractorSplit,
+  ],
 
   // will be deep-merged to the default theme
   extendTheme: (theme) => {
@@ -118,12 +147,10 @@ export default defineConfig({
   // provides a unified interface to transform source code in order to support conventions
   transformers: [transformerDirectives(), transformerVariantGroup()],
 
-  // work around the limitation of dynamically constructed utilities
-  // https://unocss.dev/guide/extracting#limitations
   safelist: [
     ...navIcons,
     ...socialIcons,
-    ...projectIcons,
+    // ...projectIcons,
 
     /* BaseLayout */
     'focus:not-sr-only',
