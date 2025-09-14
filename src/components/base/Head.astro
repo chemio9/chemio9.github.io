@@ -25,10 +25,7 @@ const pageDescription = description || SITE.description
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
-const generatedOgImage = checkFileExistsInDir(
-  'public/og-images',
-  `${basename(Astro.url.pathname)}.png`
-)
+const generatedOgImage = ogImage === true
   ? withBasePath('og-images', `${basename(Astro.url.pathname)}.png`)
   : undefined
 
