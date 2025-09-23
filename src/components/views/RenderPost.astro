@@ -1,17 +1,17 @@
 ---
-import { render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
-import BaseLayout from '~/layouts/BaseLayout.astro'
-import StandardLayout from '~/layouts/StandardLayout.astro'
+import { render } from 'astro:content'
 import PostMeta from '~/components/base/PostMeta.astro'
 import Warning from '~/components/base/Warning.astro'
 import Toc from '~/components/toc/Toc.astro'
-import ShareLink from '~/components/widgets/ShareLink.astro'
 import Giscus from '~/components/widgets/Giscus.astro'
 import ImageViewer from '~/components/widgets/ImageViewer.astro'
+import ShareLink from '~/components/widgets/ShareLink.astro'
 import { FEATURES } from '~/config'
+import BaseLayout from '~/layouts/BaseLayout.astro'
 
-import type { CollectionEntry } from 'astro:content'
+import StandardLayout from '~/layouts/StandardLayout.astro'
 
 interface Props {
   post: CollectionEntry<'blog' | 'changelog'>
@@ -29,16 +29,13 @@ const title = frontmatter.title
 const description = frontmatter.description
 const ogImage = frontmatter.ogImage
 const pubDate = frontmatter.pubDate.toISOString()
-const lastModDate =
-  frontmatter.lastModDate && frontmatter.lastModDate.toISOString()
+const lastModDate = frontmatter.lastModDate && frontmatter.lastModDate.toISOString()
 const subtitle = frontmatter.subtitle
-const minutesRead =
-  frontmatter.minutesRead || (remarkPluginFrontmatter.minutesRead as number)
+const minutesRead = frontmatter.minutesRead || (remarkPluginFrontmatter.minutesRead as number)
 const isDraft = frontmatter.draft
 const tocEnabled = Array.isArray(toc) && toc[0] && frontmatter.toc
 const shareEnabled = Array.isArray(share) && share[0] && frontmatter.share
-const giscusEnabled =
-  isCommentable && Array.isArray(giscus) && giscus[0] && frontmatter.giscus
+const giscusEnabled = isCommentable && Array.isArray(giscus) && giscus[0] && frontmatter.giscus
 
 const WARNING = `This is a draft post that will not be published
 in production. Set the post's <code>draft</code> property in

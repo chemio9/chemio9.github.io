@@ -1,16 +1,16 @@
 ---
-import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
+import type { Icon, RepoWithOwner, Url } from '~/types'
+import { getCollection } from 'astro:content'
 import Link from '~/components/base/Link.astro'
-import GithubItem from '~/components/views/GithubItem.astro'
 import Warning from '~/components/base/Warning.astro'
+import GithubItem from '~/components/views/GithubItem.astro'
 import { UI } from '~/config'
+import { extractPackageName, matchLogo, processVersion } from '~/utils/data'
+
 import { formatDate, isDiffMonth } from '~/utils/datetime'
 import { withBasePath } from '~/utils/path'
-import { matchLogo, extractPackageName, processVersion } from '~/utils/data'
-
-import type { RepoWithOwner, Url, Icon } from '~/types'
-import type { CollectionEntry } from 'astro:content'
 
 export type ExtendedReleaseData = CollectionEntry<'releases'>['data'] & {
   isInMonorepo: boolean
@@ -50,21 +50,13 @@ if (collectionType === 'releases') {
   const pkgCountMap: Record<string, number> = {}
   extendedReleases = releases
     .map((item) => {
-      const isInMonorepo = monorepos.includes(
-        item.data.repoNameWithOwner as RepoWithOwner
-      )
-      const pkgName = isInMonorepo
-        ? extractPackageName(item.data.tagName)
-        : item.data.repoName
+      const isInMonorepo = monorepos.includes(item.data.repoNameWithOwner as RepoWithOwner)
+      const pkgName = isInMonorepo ? extractPackageName(item.data.tagName) : item.data.repoName
 
-      const mainLogo =
-        matchLogo(pkgName, mainLogoOverrides) ||
-        `https://github.com/${item.data.repoOwner}.png`
+      const mainLogo = matchLogo(pkgName, mainLogoOverrides) || `https://github.com/${item.data.repoOwner}.png`
       const subLogo = matchLogo(pkgName, subLogoMatches)
 
-      const [versionType, ...versionParts] = processVersion(
-        item.data.versionNum
-      )
+      const [versionType, ...versionParts] = processVersion(item.data.versionNum)
 
       return {
         ...item.data,
@@ -100,10 +92,7 @@ if (collectionType === 'prs') {
 
   extendedPrs = prs
     .filter(
-      (item) =>
-        item.data.state !== 'CLOSED' &&
-        !item.data.isDraft &&
-        !/\b(?:chore|docs|i18n)\b/.test(item.data.title)
+      item => item.data.state !== 'CLOSED' && !item.data.isDraft && !/\b(?:chore|docs|i18n)\b/.test(item.data.title),
     )
     .map((item) => {
       const mainLogo =
@@ -126,10 +115,12 @@ if (collectionType === 'prs') {
 ---
 
 {
-  isEmpty ? (
+  isEmpty
+? (
     <Warning html={WARNING} />
-  ) : (
-    <div class="flex flex-col gap-8 lt-sm:gap-6 mt-16.8">
+  )
+: (
+    <div class="mt-16.8 flex flex-col gap-8 lt-sm:gap-6">
       {collectionType === 'releases' &&
         extendedReleases.map((item, idx) => (
           <GithubItem
@@ -138,9 +129,7 @@ if (collectionType === 'prs') {
             item={item}
             isDiffMonth={isDiffMonth(
               item.publishedAt,
-              extendedReleases[idx - 1]
-                ? extendedReleases[idx - 1].publishedAt
-                : undefined
+              extendedReleases[idx - 1] ? extendedReleases[idx - 1].publishedAt : undefined,
             )}
           />
         ))}
@@ -150,16 +139,13 @@ if (collectionType === 'prs') {
             collectionType={collectionType}
             idx={idx}
             item={item}
-            isDiffMonth={isDiffMonth(
-              item.createdAt,
-              extendedPrs[idx - 1] ? extendedPrs[idx - 1].createdAt : undefined
-            )}
+            isDiffMonth={isDiffMonth(item.createdAt, extendedPrs[idx - 1] ? extendedPrs[idx - 1].createdAt : undefined)}
           />
         ))}
 
-      <div class="prose flex flex-col items-center mx-a op-50 text-center text-3.75! lt-sm:text-sm!">
+      <div class="prose mx-a flex flex-col items-center text-center op-50 text-3.75! lt-sm:text-sm!">
         <hr class="mt-3em!" />
-        <p class="flex lt-sm:flex-col items-center my-0! lt-sm:my-1.5!">
+        <p class="flex items-center my-0! lt-sm:flex-col lt-sm:my-1.5!">
           <span>
             Last fetched:
             <time
@@ -178,10 +164,7 @@ if (collectionType === 'prs') {
         </p>
         <p class="my-0! lt-sm:my-1.5!">
           See
-          <Link
-            class="op-100!"
-            href={withBasePath('/blog/customizing-github-activity-pages/')}
-          >
+          <Link class="op-100!" href={withBasePath('/blog/customizing-github-activity-pages/')}>
             Customizing GitHub Activity Pages
           </Link>
           to configure your own
@@ -190,15 +173,9 @@ if (collectionType === 'prs') {
           Inspired by
           <Link
             class="op-100!"
-            href={
-              collectionType === 'releases'
-                ? 'https://releases.antfu.me/'
-                : 'https://prs.atinux.com/'
-            }
+            href={collectionType === 'releases' ? 'https://releases.antfu.me/' : 'https://prs.atinux.com/'}
           >
-            {collectionType === 'releases'
-              ? 'releases.antfu.me'
-              : 'prs.atinux.com'}
+            {collectionType === 'releases' ? 'releases.antfu.me' : 'prs.atinux.com'}
           </Link>
         </p>
       </div>

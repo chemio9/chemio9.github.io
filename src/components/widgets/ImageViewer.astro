@@ -8,12 +8,7 @@ interface Props {
   tabFocus?: boolean
 }
 
-const {
-  selector,
-  options,
-  asyncInsert = false,
-  tabFocus = false,
-} = Astro.props as Props
+const { selector, options, asyncInsert = false, tabFocus = false } = Astro.props as Props
 ---
 
 <image-viewer

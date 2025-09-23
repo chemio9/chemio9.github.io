@@ -25,7 +25,6 @@ Solution: use a custom extractor to extract icon classes from the file.
 } from 'unocss'
 +import type { ProjectSchema } from '~/content/schema'
 
-
 -const projectIcons = projecstData.map((item) => item.icon)
 +// const projectIcons = projecstData.map((item) => item.icon)
 ...
@@ -72,7 +71,6 @@ export default defineConfig({
     ...socialIcons,
 -    ...projectIcons,
 +    // ...projectIcons,
-
 
 ```
 

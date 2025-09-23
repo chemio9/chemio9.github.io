@@ -1,6 +1,6 @@
 ---
-import Loader from '~/components/widgets/Loader.astro'
 import ImageViewer from '~/components/widgets/ImageViewer.astro'
+import Loader from '~/components/widgets/Loader.astro'
 
 import { hash } from '~/pages/photos/photos.[hash].json'
 
@@ -32,14 +32,11 @@ const {
     data-batch-size={batchSize}
     data-layout={layout}
     data-masonry-strategy={layout === 'masonry' ? masonryStrategy : undefined}
-    class="photo-view block relative w-full"
+    class="photo-view relative block w-full"
   >
     <div class="photo-container"></div>
     <button
-      class="photo-layout-toggle z-50 fixed left-5 bottom-6
-        flex items-center justify-center w-10 h-10 rounded-full
-        op-30 op-transition lt-lgp:(op-50! bg-#8883 dark:bg-#8886)
-        hover:(op-100! bg-#8883) print:hidden"
+      class="photo-layout-toggle fixed bottom-6 left-5 z-50 h-10 w-10 flex items-center justify-center rounded-full op-30 op-transition print:hidden hover:(bg-#8883 op-100!) lt-lgp:(bg-#8883 dark:bg-#8886 op-50!)"
       title="Layout toggle"
     >
       <div u-i-ri-layout-masonry-line class="icon-masonry hidden"></div>
@@ -47,12 +44,7 @@ const {
     </button>
   </photo-view>
   <Loader class="photo-loader" />
-  <ImageViewer
-    selector=".photo-container"
-    options={{ url: 'data-origin' }}
-    asyncInsert={true}
-    tabFocus={true}
-  />
+  <ImageViewer selector=".photo-container" options={{ url: 'data-origin' }} asyncInsert={true} tabFocus={true} />
 </div>
 
 <script>
@@ -63,10 +55,10 @@ const {
     #isMasonry = this.dataset.layout === 'masonry'
     #masonryStrategy = this.dataset.masonryStrategy || 'sequential'
 
-    #gap = parseInt(this.dataset.gap || '16', 10)
-    #minPhotoWidth = parseInt(this.dataset.minPhotoWidth || '240', 10)
-    #maxPhotoWidth = parseInt(this.dataset.maxPhotoWidth || '1000', 10)
-    #batchSize = parseInt(this.dataset.batchSize || '15', 10)
+    #gap = Number.parseInt(this.dataset.gap || '16', 10)
+    #minPhotoWidth = Number.parseInt(this.dataset.minPhotoWidth || '240', 10)
+    #maxPhotoWidth = Number.parseInt(this.dataset.maxPhotoWidth || '1000', 10)
+    #batchSize = Number.parseInt(this.dataset.batchSize || '15', 10)
 
     #columns = 0
     #colWidth = 0
@@ -153,10 +145,7 @@ const {
         this.#isMasonry = localStorage.getItem('photo-layout') === 'masonry'
       } else {
         this.#isMasonry = this.dataset.layout === 'masonry'
-        localStorage.setItem(
-          'photo-layout',
-          this.#isMasonry ? 'masonry' : 'square'
-        )
+        localStorage.setItem('photo-layout', this.#isMasonry ? 'masonry' : 'square')
       }
 
       this.dataset.layout = this.#isMasonry ? 'masonry' : 'square'
@@ -178,22 +167,17 @@ const {
       this.#containerWidth = this.offsetWidth
 
       this.#columns = Math.floor(this.#containerWidth / this.#minPhotoWidth)
-      this.#columns = Math.max(
-        1,
-        Math.min(this.#columns, this.#allItems.length)
-      )
+      this.#columns = Math.max(1, Math.min(this.#columns, this.#allItems.length))
 
       const totalGap = this.#gap * (this.#columns - 1)
       this.#colWidth = (this.#containerWidth - totalGap) / this.#columns
       this.#colWidth = Math.min(this.#colWidth, this.#maxPhotoWidth)
       this.#container?.style.setProperty('--photo-width', `${this.#colWidth}px`)
 
-      this.#colHeights = new Array(this.#columns).fill(0)
+      this.#colHeights = Array.from({ length: this.#columns }).fill(0) as number[]
     }
 
-    #calcMasonryTranslate = (
-      idx: number
-    ): { col: number; left: number; top: number } => {
+    #calcMasonryTranslate = (idx: number): { col: number, left: number, top: number } => {
       const col =
         this.#masonryStrategy === 'sequential'
           ? idx % this.#columns
@@ -227,8 +211,8 @@ const {
         fig.setAttribute('role', 'button')
         fig.setAttribute('tabindex', '0')
         fig.setAttribute('aria-label', 'Open viewer')
-        fig.style.setProperty('--photo-top', top.toString() + 'px')
-        fig.style.setProperty('--photo-left', left.toString() + 'px')
+        fig.style.setProperty('--photo-top', `${top.toString()}px`)
+        fig.style.setProperty('--photo-left', `${left.toString()}px`)
         fig.style.setProperty('--photo-height', `${height}px`)
         fig.style.setProperty('--photo-placeholder', `url(${item.placeholder})`)
 
@@ -241,7 +225,7 @@ const {
           function (this: HTMLImageElement) {
             this.style.setProperty('--photo-opacity', '1')
           },
-          { once: true }
+          { once: true },
         )
         fig.appendChild(img)
 
@@ -263,10 +247,7 @@ const {
     }
 
     #getGridParams = () => {
-      this.#container?.style.setProperty(
-        '--min-photo-width',
-        `${this.#minPhotoWidth}px`
-      )
+      this.#container?.style.setProperty('--min-photo-width', `${this.#minPhotoWidth}px`)
       this.#container?.style.setProperty('--photo-gap', `${this.#gap}px`)
     }
 
@@ -299,7 +280,7 @@ const {
           function (this: HTMLImageElement) {
             this.style.opacity = '1'
           },
-          { once: true }
+          { once: true },
         )
         fig.appendChild(img)
 
@@ -321,16 +302,14 @@ const {
       if (this.#containerWidth === this.offsetWidth) return
       this.#getMasonryParams()
 
-      const figs = Array.from(
-        this.querySelectorAll('.photo-figure')
-      ) as HTMLElement[]
+      const figs = Array.from(this.querySelectorAll('.photo-figure')) as HTMLElement[]
       for (let idx = 0; idx < figs.length; idx++) {
         const fig = figs[idx]
         const { col, left, top } = this.#calcMasonryTranslate(idx)
-        const ratio = parseFloat(fig.dataset.aspectRatio!)
+        const ratio = Number.parseFloat(fig.dataset.aspectRatio!)
 
-        fig.style.setProperty('--photo-left', left.toString() + 'px')
-        fig.style.setProperty('--photo-top', top.toString() + 'px')
+        fig.style.setProperty('--photo-left', `${left.toString()}px`)
+        fig.style.setProperty('--photo-top', `${top.toString()}px`)
         fig.style.setProperty('--photo-height', `${this.#colWidth / ratio}px`)
 
         this.#colHeights[col] += this.#colWidth / ratio + this.#gap
@@ -343,8 +322,7 @@ const {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight
-      const isNearBottom =
-        documentHeight - (scrollTop + windowHeight) <= this.#distanceToBottom
+      const isNearBottom = documentHeight - (scrollTop + windowHeight) <= this.#distanceToBottom
 
       if (isNearBottom) {
         this.#isLoading = true
@@ -389,10 +367,7 @@ const {
 
       this.#buildLayout()
 
-      window.localStorage.setItem(
-        'photo-layout',
-        this.#isMasonry ? 'masonry' : 'square'
-      )
+      window.localStorage.setItem('photo-layout', this.#isMasonry ? 'masonry' : 'square')
     }
 
     // event delegation: open viewer when focus is on a figure and presses Enter
@@ -408,6 +383,5 @@ const {
     }
   }
 
-  if (!customElements.get('photo-view'))
-    customElements.define('photo-view', PhotoView)
+  if (!customElements.get('photo-view')) customElements.define('photo-view', PhotoView)
 </script>

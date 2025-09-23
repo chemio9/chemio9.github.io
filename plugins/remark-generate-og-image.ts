@@ -1,19 +1,28 @@
-import { join, basename, dirname } from 'node:path'
-import { readFileSync, existsSync, writeFileSync } from 'node:fs'
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable no-console */
+import type { Root } from 'mdast'
+import type { SatoriOptions } from 'satori'
+
+import type { html } from 'satori-html'
+import type { Transformer } from 'unified'
+import type { BgType } from '../src/types'
+
+import { Buffer } from 'node:buffer'
+
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
+import { basename, dirname, join } from 'node:path'
+import chalk from 'chalk'
 
 import { decode } from 'html-entities'
 import satori from 'satori'
 import sharp from 'sharp'
-import chalk from 'chalk'
 
+import { FEATURES } from '../src/config'
 import { getCurrentFormattedTime } from '../src/utils/datetime'
 import { ogImageMarkup } from './og-template/markup'
-import { FEATURES } from '../src/config'
 
-import type { SatoriOptions } from 'satori'
-import type { html } from 'satori-html'
-import type { BgType } from '../src/types'
+/// <reference types="@astro/markdown-remark/dist/types.d.ts">
 
 const Inter = readFileSync('plugins/og-template/Inter-Regular-24pt.ttf')
 
@@ -50,9 +59,8 @@ export function checkFileExistsInDir(path: string, filename: string) {
  */
 function unescapeHTML(node: ReturnType<typeof html>) {
   const children = node?.props?.children
-  if (!children) {
-    return
-  } else if (Array.isArray(children)) {
+  if (!children) return
+  if (Array.isArray(children)) {
     for (const n of children) {
       unescapeHTML(n)
     }
@@ -70,12 +78,12 @@ async function generateOgImage(
   authorOrBrand: string,
   title: string,
   bgType: BgType,
-  output: string
+  output: string,
 ) {
   await mkdir(dirname(output), { recursive: true })
 
   console.log(
-    `${chalk.black(getCurrentFormattedTime())} ${chalk.green(`Generating ${output}...`)}`
+    `${chalk.black(getCurrentFormattedTime())} ${chalk.green(`Generating ${output}...`)}`,
   )
 
   try {
@@ -94,7 +102,7 @@ async function generateOgImage(
     writeFileSync(output, compressedPngBuffer)
   } catch (e) {
     console.error(
-      `${chalk.black(getCurrentFormattedTime())} ${chalk.red(`[ERROR] Failed to generate og image for '${basename(output)}'.`)}`
+      `${chalk.black(getCurrentFormattedTime())} ${chalk.red(`[ERROR] Failed to generate og image for '${basename(output)}'.`)}`,
     )
     console.error(e)
   }
@@ -105,15 +113,13 @@ async function generateOgImage(
  *
  * @see https://github.com/vfile/vfile
  */
-function remarkGenerateOgImage() {
+function remarkGenerateOgImage(): Transformer<Root> | undefined {
   // get config
   const ogImage = FEATURES.ogImage
   if (!(Array.isArray(ogImage) && ogImage[0])) return
 
   const { authorOrBrand, fallbackTitle, fallbackBgType } = ogImage[1]
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return async (_tree, file) => {
     // regenerate fallback
     if (!checkFileExistsInDir('public/og-images', 'og-image.png')) {
@@ -121,7 +127,7 @@ function remarkGenerateOgImage() {
         authorOrBrand,
         fallbackTitle,
         fallbackBgType,
-        'public/og-images/og-image.png'
+        'public/og-images/og-image.png',
       )
     }
 
@@ -132,19 +138,19 @@ function remarkGenerateOgImage() {
       return
 
     // check draft & redirect
-    const draft = file.data.astro.frontmatter.draft
-    const redirect = file.data.astro.frontmatter.redirect
+    const draft = file.data.astro?.frontmatter?.draft
+    const redirect = file.data.astro?.frontmatter?.redirect
     if (draft || redirect) return
 
     // check if it need to be skipped
-    const title = file.data.astro.frontmatter.title
+    const title = file.data.astro?.frontmatter?.title as string
     if (!title || !title.trim().length) return
-    const ogImage = file.data.astro.frontmatter.ogImage
+    const ogImage = file.data.astro?.frontmatter?.ogImage as boolean | string
     if (ogImage === false) return
 
     // check if it has been generated
     const extname = file.extname
-    const dirpath = file.dirname
+    const dirpath = file.dirname!
     let nameWithoutExt = basename(filename, extname)
     if (nameWithoutExt === 'index') nameWithoutExt = basename(dirpath)
     if (checkFileExistsInDir('public/og-images', `${nameWithoutExt}.png`))
@@ -152,25 +158,26 @@ function remarkGenerateOgImage() {
 
     // check if it has been assigned & actually exists
     if (
-      ogImage &&
-      ogImage !== true &&
-      checkFileExistsInDir('public/og-images', basename(ogImage))
-    )
+      ogImage
+      && ogImage !== true
+      && checkFileExistsInDir('public/og-images', basename(ogImage))
+    ) {
       return
+    }
 
     if (
-      ogImage &&
-      ogImage !== true &&
-      !checkFileExistsInDir('public/og-images', basename(ogImage))
+      ogImage
+      && ogImage !== true
+      && !checkFileExistsInDir('public/og-images', basename(ogImage))
     ) {
       console.warn(
-        `${chalk.black(getCurrentFormattedTime())} ${chalk.yellow(`[WARN] The '${ogImage}' specified in '${file.path}' was not found.`)}\n  ${chalk.bold('Hint:')} See ${chalk.cyan.underline('https://astro-antfustyle-theme.vercel.app/blog/about-open-graph-images/#configuring-og-images')} for more information on og image.`
+        `${chalk.black(getCurrentFormattedTime())} ${chalk.yellow(`[WARN] The '${ogImage}' specified in '${file.path}' was not found.`)}\n  ${chalk.bold('Hint:')} See ${chalk.cyan.underline('https://astro-antfustyle-theme.vercel.app/blog/about-open-graph-images/#configuring-og-images')} for more information on og image.`,
       )
       return
     }
 
     // get bgType
-    const pageBgType = file.data.astro.frontmatter.bgType
+    const pageBgType = file.data.astro?.frontmatter?.bgType as BgType
     const bgType = pageBgType || fallbackBgType
 
     // generate og images
@@ -178,7 +185,7 @@ function remarkGenerateOgImage() {
       authorOrBrand,
       title.trim(),
       bgType,
-      `public/og-images/${nameWithoutExt}.png`
+      `public/og-images/${nameWithoutExt}.png`,
     )
   }
 }

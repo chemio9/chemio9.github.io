@@ -1,7 +1,7 @@
-import { getImage } from 'astro:assets'
-import sharp from 'sharp'
-
 import type { SharpInput } from 'sharp'
+import { getImage } from 'astro:assets'
+
+import sharp from 'sharp'
 
 interface RemoteImageSuccess {
   isImage: true
@@ -27,7 +27,7 @@ const MAX_BYTES = 10_000_000
 function getBitmapDimensions(
   imgWidth: number,
   imgHeight: number,
-  pixelTarget: number
+  pixelTarget: number,
 ) {
   // h * r * h = ~P
   const ratioWH = imgWidth / imgHeight
@@ -45,7 +45,7 @@ export async function generatePlaceholder(
   buffer: SharpInput,
   width: number,
   height: number,
-  pixelTarget: number
+  pixelTarget: number,
 ) {
   // calculate appropriate dimensions for the placeholder
   const dims = getBitmapDimensions(width, height, pixelTarget)
@@ -94,7 +94,7 @@ function concat(chunks: Uint8Array[], size: number): Uint8Array {
  */
 export async function fetchRemoteImageWithSharp(
   urlStr: string,
-  opts: { timeoutMs?: number; maxBytes?: number } = {}
+  opts: { timeoutMs?: number, maxBytes?: number } = {},
 ): Promise<RemoteImageSuccess | RemoteImageFail> {
   const { timeoutMs = TIMEOUT_MS, maxBytes = MAX_BYTES } = opts
 
@@ -124,7 +124,7 @@ export async function fetchRemoteImageWithSharp(
     const len = Number(head.headers.get('content-length') ?? 0)
     if (len && len > maxBytes) {
       console.warn(
-        `[fetchRemoteImageWithSharp] File too large (${len}B): ${urlStr}`
+        `[fetchRemoteImageWithSharp] File too large (${len}B): ${urlStr}`,
       )
       return { isImage: false, data: null, width: null, height: null }
     }
@@ -132,7 +132,7 @@ export async function fetchRemoteImageWithSharp(
     if (head.ok && !ctype.startsWith('image/')) {
       // may still be an image (server misconfiguration), continue with GET; but warn first
       console.warn(
-        `[fetchRemoteImageWithSharp] Content-Type not image/* (${ctype}), continuing with deep inspection`
+        `[fetchRemoteImageWithSharp] Content-Type not image/* (${ctype}), continuing with deep inspection`,
       )
     }
   } catch {
@@ -148,7 +148,7 @@ export async function fetchRemoteImageWithSharp(
 
   if (!res.ok || !res.body) {
     console.warn(
-      `[fetchRemoteImageWithSharp] Download failed: HTTP ${res.status}`
+      `[fetchRemoteImageWithSharp] Download failed: HTTP ${res.status}`,
     )
     return { isImage: false, data: null, width: null, height: null }
   }
@@ -165,7 +165,7 @@ export async function fetchRemoteImageWithSharp(
     total += value.byteLength
     if (total > maxBytes) {
       console.warn(
-        `[fetchRemoteImageWithSharp] Exceeded size limit ${maxBytes}B`
+        `[fetchRemoteImageWithSharp] Exceeded size limit ${maxBytes}B`,
       )
       return { isImage: false, data: null, width: null, height: null }
     }
@@ -186,7 +186,7 @@ export async function fetchRemoteImageWithSharp(
     return { isImage: true, data: buffer, width, height }
   } catch (err) {
     console.warn(
-      `[fetchRemoteImageWithSharp] Not an image or parsing failed: ${(err as Error).message}`
+      `[fetchRemoteImageWithSharp] Not an image or parsing failed: ${(err as Error).message}`,
     )
     return { isImage: false, data: null, width: null, height: null }
   }
@@ -198,7 +198,7 @@ export async function fetchRemoteImageWithSharp(
 export async function getThumbnail(
   src: string | ImageMetadata,
   width: number,
-  ratio: number
+  ratio: number,
 ): Promise<string> {
   const result = await getImage({
     src,

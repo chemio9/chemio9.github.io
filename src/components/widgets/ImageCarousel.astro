@@ -1,7 +1,7 @@
 ---
-import { Image } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 import type { LocalImageProps, RemoteImageProps } from 'astro:assets'
+import { Image } from 'astro:assets'
 
 export interface Props {
   images: {
@@ -16,7 +16,7 @@ const { images, imageProps, autoplayDelay = 3000 } = Astro.props
 ---
 
 <image-carousel
-  class="block relative"
+  class="relative block"
   data-autoplay-delay={autoplayDelay}
   role="region"
   aria-roledescription="carousel"
@@ -24,7 +24,7 @@ const { images, imageProps, autoplayDelay = 3000 } = Astro.props
   aria-live="polite"
 >
   {
-    images.map((item) => (
+    images.map(item => (
       <div class="op-transition-600" role="group" aria-roledescription="slide">
         {/* @ts-expect-error(ignore) */}
         <Image
@@ -42,7 +42,7 @@ const { images, imageProps, autoplayDelay = 3000 } = Astro.props
 <script>
   class ImageCarousel extends HTMLElement {
     #current = 0
-    #autoplayDelay = parseInt(this.dataset.autoplayDelay || '3000', 10)
+    #autoplayDelay = Number.parseInt(this.dataset.autoplayDelay || '3000', 10)
     #autoplayTimer: number | null = null
     #slides: HTMLElement[] = []
 
@@ -71,10 +71,7 @@ const { images, imageProps, autoplayDelay = 3000 } = Astro.props
         const el = this.#slides[idx]
         el.style.opacity = idx === this.#current ? '1' : '0'
         el.setAttribute('aria-hidden', idx === this.#current ? 'false' : 'true')
-        el.setAttribute(
-          'aria-current',
-          idx === this.#current ? 'true' : 'false'
-        )
+        el.setAttribute('aria-current', idx === this.#current ? 'true' : 'false')
       }
     }
 
@@ -100,6 +97,5 @@ const { images, imageProps, autoplayDelay = 3000 } = Astro.props
     }
   }
 
-  if (!customElements.get('image-carousel'))
-    customElements.define('image-carousel', ImageCarousel)
+  if (!customElements.get('image-carousel')) customElements.define('image-carousel', ImageCarousel)
 </script>

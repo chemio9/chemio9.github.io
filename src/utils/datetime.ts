@@ -5,7 +5,7 @@ import { SITE } from '../config'
  */
 export function formatDate(d: Date | string, showYear = true, useUTC = false) {
   const date = typeof d === 'string' ? new Date(d) : d
-  if (isNaN(date.getTime())) throw new Error('Invalid Date')
+  if (Number.isNaN(date.getTime())) throw new Error('Invalid Date')
 
   const options: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -29,7 +29,7 @@ export function getYear(a: Date | string | number) {
  */
 export function isSameYear(
   a?: Date | string | number,
-  b?: Date | string | number
+  b?: Date | string | number,
 ) {
   return a && b && getYear(a) === getYear(b)
 }
@@ -51,6 +51,6 @@ export function getCurrentFormattedTime() {
  */
 export function isDiffMonth(currentTime: string, preTime?: string) {
   return preTime
-    ? new Date(currentTime).getMonth() !== new Date(preTime!).getMonth()
+    ? new Date(currentTime).getMonth() !== new Date(preTime).getMonth()
     : false
 }

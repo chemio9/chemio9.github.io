@@ -14,11 +14,12 @@ ogImage: true
 > [Should We Follow The Open-Closed Principle?](https://thevaluable.dev/open-closed-principle-revisited/)
 
 ![The Open-Closed Principle extend behaviors instead of changing them](./assets/no_change_but_children.jpg)
+
 > 开闭原则不改变行为，而是拓展行为
 
 <!-- When I first heard about the SOLID principles as a young and innocent developer, many of them seemed confusing to me. The Open-Closed Principle looked easy, however: we should extend the behavior of our classes instead of modifying them. -->
 
-当我还是个年轻而无知的菜鸟开发者的时候，第一次听说 S.O.L.I.D. 原则令我十分疑惑。其中的**开闭原则**（The *Open-Closed Principle*，**OCP**）看起来很简单：我们应该拓展类的行为，而不应该修改他们。
+当我还是个年轻而无知的菜鸟开发者的时候，第一次听说 S.O.L.I.D. 原则令我十分疑惑。其中的**开闭原则**（The _Open-Closed Principle_，**OCP**）看起来很简单：我们应该拓展类的行为，而不应该修改他们。
 
 <!-- I did extend the behavior of my classes indeed! Mainly by [using inheritance](https://thevaluable.dev/guide-inheritance-oop/) in one form or another. The end result? An abstracted mess, where everybody was wondering what was the _use cases_ my code was covering, hidden under a cheer amount of abstractions and indirection. -->
 
@@ -35,6 +36,7 @@ ogImage: true
 - 在通常情况下，当开发者谈到 `开闭原则` 的时候，是什么意思
 
 <!-- - The origins of the Open-Closed principle. -->
+
 - 开闭原则的起源
 <!-- - Robert Martin’s version of the Open-Closed Principle. -->
 - Robert Martin 口中的开闭原则
@@ -66,15 +68,19 @@ ogImage: true
 > 软件实体（类，模块，函数等）应该对扩展开放，但对修改关闭。
 
 <!-- Let’s imagine that your “software entity” is the class “Shipment”. Your project manager asks you to change the behavior of the shipments in your disruptive application. Should you modify the class? -->
+
 让我们想象一下：你的“软件实体”是“Shipment”类。你的项目经理让你在混乱的业务中改变货物（shipment）的行为。你应该修改这个类吗？
 
 <!-- Absolutely not! Your class should be close to modification. We don’t have the right to change it. But how can we ease the wrath of our project manager? We need to _extend_ our class! -->
+
 绝对不要！你的类应该对修改关闭。我们没有权利修改它。那么我们该如何平息项目经理的怒火呢？我们需要*拓展*我们的类！
 
 <!-- This is a weird idea. Have you ever seen a developer doing her job without modifying the code, only _adding_ to it? I didn’t. But it’s possible that I’ve only worked with pagans who didn’t know the Real Truth©. I worked with people trying to implement the OCP too, but they still had to modify some code at some point. -->
+
 好吧，这个想法挺奇怪的。你这辈子见过一个开发者，工作的时候不修改代码，只*增加*代码的吗？我倒是没见过。但是可能是因为我只和那些不知道真相（Real Truth©）的异教徒合作过。我也和一群人一起尝试实现OCP，但是他们还是得在某些时候修改一些代码。
 
 <!-- But let’s do some more research before digging the grave of our good old OCP. Where does this principle come from? -->
+
 但是在我们挖开OCP的墓穴之前，先研究一下历史吧：这个原则从哪来的？
 
 > [!NOTE]

@@ -7,22 +7,10 @@ interface Props {
 const { style, class: className } = Astro.props
 ---
 
-<div
-  {style}
-  class={`flex items-center justify-center gap-3 h-full w-full ${className}`}
->
-  <div
-    class="w-4 h-4 rounded-full bg-[#88888850] animate-[dot-pulse_1.5s_ease-in-out_both_infinite]"
-  >
-  </div>
-  <div
-    class="w-4 h-4 rounded-full bg-[#88888850] animate-[dot-pulse_1.5s_ease-in-out_both_infinite_0.16s]"
-  >
-  </div>
-  <div
-    class="w-4 h-4 rounded-full bg-[#88888850] animate-[dot-pulse_1.5s_ease-in-out_both_infinite_0.32s]"
-  >
-  </div>
+<div {style} class={`h-full w-full flex items-center justify-center gap-3 ${className}`}>
+  <div class="h-4 w-4 animate-[dot-pulse_1.5s_ease-in-out_both_infinite] rounded-full bg-[#88888850]"></div>
+  <div class="h-4 w-4 animate-[dot-pulse_1.5s_ease-in-out_both_infinite_0.16s] rounded-full bg-[#88888850]"></div>
+  <div class="h-4 w-4 animate-[dot-pulse_1.5s_ease-in-out_both_infinite_0.32s] rounded-full bg-[#88888850]"></div>
 </div>
 
 <style>

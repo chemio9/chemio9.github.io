@@ -1,10 +1,10 @@
 ---
-import { ClientRouter } from 'astro:transitions'
 import { basename } from 'node:path'
+import { ClientRouter } from 'astro:transitions'
 
-import { checkFileExistsInDir } from '../../../plugins/remark-generate-og-image'
-import { withBasePath } from '~/utils/path'
 import { SITE } from '~/config'
+import { withBasePath } from '~/utils/path'
+import { checkFileExistsInDir } from '../../../plugins/remark-generate-og-image'
 
 interface Props {
   title?: string
@@ -18,8 +18,7 @@ const { title, description, ogImage, pubDate, lastModDate } = Astro.props
 
 const siteName = new URL(SITE.website).hostname
 
-const pageTitle =
-  title && title !== SITE.title ? `${title} - ${SITE.title}` : SITE.title
+const pageTitle = title && title !== SITE.title ? `${title} - ${SITE.title}` : SITE.title
 
 const pageDescription = description || SITE.description
 
@@ -30,18 +29,12 @@ const generatedOgImage = ogImage === true
   : undefined
 
 const assignedOgImage =
-  ogImage &&
-  ogImage !== true &&
-  checkFileExistsInDir('public/og-images', ogImage)
+  ogImage && ogImage !== true && checkFileExistsInDir('public/og-images', ogImage)
     ? withBasePath('og-images', ogImage)
     : undefined
 
-const ogImageURL = new URL(
-  assignedOgImage ||
-    generatedOgImage ||
-    withBasePath('og-images', 'og-image.png'),
-  Astro.url
-).href
+const ogImageURL = new URL(assignedOgImage || generatedOgImage || withBasePath('og-images', 'og-image.png'), Astro.url)
+  .href
 
 // https://jsonld.com/blog-post/
 const blogPostingData = {
@@ -52,7 +45,7 @@ const blogPostingData = {
   'url': canonicalURL,
   'datePublished': pubDate,
   ...(lastModDate && { dateModified: lastModDate }),
-  ...(description && { description: description }),
+  ...(description && { description }),
   'author': {
     '@type': 'Person',
     'name': SITE.author,
@@ -65,7 +58,7 @@ const webPageData = {
   '@context': 'https://schema.org',
   '@type': 'webPage',
   'name': `${title || SITE.title}`,
-  ...(description && { description: description }),
+  ...(description && { description }),
   'publisher': {
     '@type': 'ProfilePage',
     'name': `${SITE.author}'s Personal Website`,
@@ -129,27 +122,16 @@ const webPageData = {
 <link rel="sitemap" href={withBasePath('/sitemap-index.xml')} />
 
 <!-- RSS -->
-<link
-  rel="alternate"
-  type="application/rss+xml"
-  title={withBasePath('/rss.xml')}
-  href="/rss.xml"
-/>
+<link rel="alternate" type="application/rss+xml" title={withBasePath('/rss.xml')} href="/rss.xml" />
 
 <!-- Google JSON-LD Structured Data -->
 {
-  pubDate ? (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(blogPostingData)}
-    />
-  ) : (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(webPageData)}
-    />
+  pubDate
+? (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(blogPostingData)} />
+  )
+: (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webPageData)} />
   )
 }
 

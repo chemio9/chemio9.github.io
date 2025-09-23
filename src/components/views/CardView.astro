@@ -1,12 +1,12 @@
 ---
+import type { CollectionKey } from 'astro:content'
+
+import type { CardItemData } from '~/components/views/CardItem.astro'
 import { getCollection } from 'astro:content'
+import Warning from '~/components/base/Warning.astro'
 
 import CardItem from '~/components/views/CardItem.astro'
-import Warning from '~/components/base/Warning.astro'
-import { processBlueskyPosts, getShortsFromBlog } from '~/utils/data'
-
-import type { CollectionKey } from 'astro:content'
-import type { CardItemData } from '~/components/views/CardItem.astro'
+import { getShortsFromBlog, processBlueskyPosts } from '~/utils/data'
 
 interface Props {
   collectionType: CollectionKey
@@ -16,13 +16,7 @@ interface Props {
   maxCardWidth?: number
 }
 
-const {
-  collectionType,
-  mode,
-  gap = 16,
-  minCardWidth,
-  maxCardWidth,
-} = Astro.props
+const { collectionType, mode, gap = 16, minCardWidth, maxCardWidth } = Astro.props
 
 const WARNING = `No content available for display.
   Please review and modify <code>CardView.astro</code> as needed.`
@@ -34,9 +28,7 @@ let dataForGrid: CardItemData[] = []
 if (collectionType === 'highlights') {
   const highlights = await getCollection(collectionType)
   dataForMasonry = processBlueskyPosts(highlights).sort((a, b) =>
-    !a.date || !b.date
-      ? 0
-      : new Date(b.date).valueOf() - new Date(a.date).valueOf()
+    !a.date || !b.date ? 0 : new Date(b.date).valueOf() - new Date(a.date).valueOf(),
   )
 }
 
@@ -49,32 +41,34 @@ if (dataForMasonry.length === 0 && dataForGrid.length === 0) isEmpty = true
 ---
 
 {
-  isEmpty ? (
+  isEmpty
+? (
     <Warning html={WARNING} />
-  ) : (
+  )
+: (
     <>
       {mode === 'masonry' && (
         <responsive-masonry
-          class="block relative w-full min-h-screen op-0 op-transition-500"
+          class="relative block min-h-screen w-full op-0 op-transition-500"
           data-gap={gap}
           data-min-card-width={minCardWidth}
           data-max-card-width={maxCardWidth}
         >
-          {dataForMasonry.map((item) => (
-            <CardItem class="card-masonry absolute top-0 left-0" item={item} />
+          {dataForMasonry.map(item => (
+            <CardItem class="card-masonry absolute left-0 top-0" item={item} />
           ))}
         </responsive-masonry>
       )}
       {mode === 'grid' && (
         <div
-          class="grid mx-20 lt-md:mx-1 fade-in"
+          class="fade-in grid mx-20 lt-md:mx-1"
           style={{
             '--fade-in-duration': '0.6s',
             'gap': `${gap}px`,
             'grid-template-columns': `repeat(auto-fill, minmax(${minCardWidth ? `${minCardWidth}px` : '220px'}, ${maxCardWidth ? `${maxCardWidth}px` : '1fr'}))`,
           }}
         >
-          {dataForGrid.map((item) => (
+          {dataForGrid.map(item => (
             <CardItem class="card-grid min-h-40 lt-md:min-h-0" item={item} />
           ))}
         </div>
@@ -133,18 +127,14 @@ if (dataForMasonry.length === 0 && dataForGrid.length === 0) isEmpty = true
       this.#initialized = false
     }
 
-    attributeChangedCallback = (
-      _name: string,
-      oldValue: string,
-      newValue: string
-    ) => {
+    attributeChangedCallback = (_name: string, oldValue: string, newValue: string) => {
       if (this.#initialized && oldValue !== newValue) {
         this.#debounceUpdateLayout()
       }
     }
 
     #getParseInt = (data: string) => {
-      return parseInt(data, 10)
+      return Number.parseInt(data, 10)
     }
 
     #debounceUpdateLayout = () => {
@@ -164,13 +154,9 @@ if (dataForMasonry.length === 0 && dataForGrid.length === 0) isEmpty = true
       for (const m of mutations) {
         const target = m.target
 
-        if (target instanceof HTMLElement && target.nodeName === 'SWIPER-SLIDE')
-          break
+        if (target instanceof HTMLElement && target.nodeName === 'SWIPER-SLIDE') break
 
-        if (
-          target instanceof HTMLElement &&
-          target.parentNode?.nodeName === 'BUTTON'
-        ) {
+        if (target instanceof HTMLElement && target.parentNode?.nodeName === 'BUTTON') {
           this.#updateLayout()
           break
         }
@@ -178,9 +164,7 @@ if (dataForMasonry.length === 0 && dataForGrid.length === 0) isEmpty = true
     }
 
     #updateLayout = () => {
-      const cards = Array.from(
-        this.querySelectorAll('.card-masonry')
-      ) as HTMLElement[]
+      const cards = Array.from(this.querySelectorAll('.card-masonry')) as HTMLElement[]
       if (!cards.length) return
 
       const { gap, minCardWidth, maxCardWidth } = this.#config
@@ -194,7 +178,7 @@ if (dataForMasonry.length === 0 && dataForGrid.length === 0) isEmpty = true
       let cardWidth = (containerWidth - totalGapWidth) / columns
       cardWidth = Math.min(cardWidth, maxCardWidth)
 
-      const columnHeights: number[] = new Array(columns).fill(0)
+      const columnHeights: number[] = Array.from({ length: columns }).fill(0) as number[]
       cards.forEach((card, index) => {
         const column = index % columns
         const left = column * (cardWidth + gap)

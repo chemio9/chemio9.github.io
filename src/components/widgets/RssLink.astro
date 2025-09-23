@@ -9,11 +9,6 @@ interface Props {
 const { class: className } = Astro.props
 ---
 
-<Link
-  class:list={['op-transition', className]}
-  href={withBasePath('/rss.xml')}
-  title="RSS Feed"
-  external={true}
->
+<Link class:list={['op-transition', className]} href={withBasePath('/rss.xml')} title="RSS Feed" external={true}>
   <div u-i-lucide-rss></div>
 </Link>

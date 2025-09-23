@@ -4,11 +4,9 @@
 
 <div
   id="backdrop"
-  class="hidden z-75 fixed inset-0
-    backdrop-blur-2 bg-[#000000cc]"
+  class="fixed inset-0 z-75 hidden bg-[#000000cc] backdrop-blur-2"
   aria-hidden="true"
->
-</div>
+></div>
 
 <script>
   import { toggleFadeEffect } from '~/utils/animation'
@@ -37,7 +35,7 @@
 
   /* Close panel and backdrop when 'Tab' shifts focus outside the panel
     or 'Escape' is pressed, if backdrop is present */
-  const handleKeyUp = (event: KeyboardEvent) => {
+  function handleKeyUp(event: KeyboardEvent) {
     if (event.key !== 'Tab' && event.key !== 'Escape') return
 
     const focusEl = document.activeElement
@@ -45,11 +43,7 @@
       const panel = document.getElementById(id)
       const isFocusOutside = !panel?.contains(focusEl) && focusEl?.id !== button
 
-      if (
-        panel &&
-        !panel.classList.contains(hiddenClass) &&
-        (isFocusOutside || event.key === 'Escape')
-      ) {
+      if (panel && !panel.classList.contains(hiddenClass) && (isFocusOutside || event.key === 'Escape')) {
         toggleFadeEffect(id, false, hiddenClass)
         toggleFadeEffect('backdrop', false, 'hidden')
         if (panel.contains(focusEl)) {

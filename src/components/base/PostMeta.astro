@@ -1,6 +1,6 @@
 ---
-import { formatDate } from '~/utils/datetime'
 import { UI } from '~/config'
+import { formatDate } from '~/utils/datetime'
 
 interface Props {
   pubDate: string
@@ -14,8 +14,9 @@ const isMinimal = UI.postMetaStyle === 'minimal'
 ---
 
 {
-  isMinimal ? (
-    <div class="mt--6! op-50">
+  isMinimal
+? (
+    <div class="op-50 mt--6!">
       <time datetime={pubDate}>{formatDate(pubDate)}</time>
       {minutesRead !== 0 && <span> · {minutesRead} min</span>}
       {lastModDate && (
@@ -24,8 +25,9 @@ const isMinimal = UI.postMetaStyle === 'minimal'
         </time>
       )}
     </div>
-  ) : (
-    <div class="flex justify-start items-center gap-4 mt--6! op-50">
+  )
+: (
+    <div class="flex items-center justify-start gap-4 op-50 mt--6!">
       <div>
         <span class="i-ri-calendar-line mr-1.2" />
         <time datetime={pubDate}>{formatDate(pubDate)}</time>
@@ -37,7 +39,7 @@ const isMinimal = UI.postMetaStyle === 'minimal'
         </div>
       )}
       <div>
-        <span class="i-ri-timer-line mr-1.2 ml--0.6" />
+        <span class="i-ri-timer-line ml--0.6 mr-1.2" />
         {minutesRead !== 0 && <span>{minutesRead} min read</span>}
       </div>
     </div>

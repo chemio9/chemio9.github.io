@@ -1,23 +1,23 @@
 ---
-import '@unocss/reset/tailwind.css'
-import '~/styles/main.css'
-import '~/styles/prose.css'
-import '~/styles/markdown.css'
-import '~/styles/page.css'
-
-import Head from '~/components/base/Head.astro'
+import type { BgType } from '~/types'
 import Background from '~/components/backgrounds/Background.astro'
+import Backdrop from '~/components/base/Backdrop.astro'
+import Footer from '~/components/base/Footer.astro'
+import Head from '~/components/base/Head.astro'
+
 import Link from '~/components/base/Link.astro'
 import NavBar from '~/components/nav/NavBar.astro'
 import BackLink from '~/components/widgets/BackLink.astro'
-import Footer from '~/components/base/Footer.astro'
 import ToTopButton from '~/components/widgets/ToTopButton.astro'
-import Backdrop from '~/components/base/Backdrop.astro'
-
-import { SITE, UI, FEATURES } from '~/config'
+import { FEATURES, SITE, UI } from '~/config'
 import { withBasePath } from '~/utils/path'
+import '@unocss/reset/tailwind.css'
+import '~/styles/main.css'
 
-import type { BgType } from '~/types'
+import '~/styles/prose.css'
+import '~/styles/markdown.css'
+
+import '~/styles/page.css'
 
 interface Props {
   title?: string
@@ -28,21 +28,18 @@ interface Props {
   lastModDate?: string
 }
 
-const { title, description, ogImage, bgType, pubDate, lastModDate } =
-  Astro.props
+const { title, description, ogImage, bgType, pubDate, lastModDate } = Astro.props
 
-let style: Record<string, string> = {}
+const style: Record<string, string> = {}
 
 const { slideEnterAnim } = FEATURES
 const enableSlideEnterAnim = Array.isArray(slideEnterAnim) && slideEnterAnim[0]
-if (enableSlideEnterAnim)
-  style['--enter-step'] = `${slideEnterAnim[1].enterStep}ms`
+if (enableSlideEnterAnim) style['--enter-step'] = `${slideEnterAnim[1].enterStep}ms`
 
 const {
   externalLink: { newTab, cursorType },
 } = UI
-const hasCustomCursor =
-  newTab && cursorType.length > 0 && cursorType !== 'pointer'
+const hasCustomCursor = newTab && cursorType.length > 0 && cursorType !== 'pointer'
 if (hasCustomCursor) style['--external-link-cursor'] = cursorType
 ---
 
@@ -53,8 +50,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
   </head>
 
   <body
-    class="relative flex flex-col min-h-screen
-      font-sans text-gray-700 dark:text-gray-200"
+    class="relative min-h-screen flex flex-col text-gray-700 font-sans dark:text-gray-200"
     style={Object.keys(style).length !== 0 ? style : undefined}
     data-no-sliding={enableSlideEnterAnim ? undefined : ''}
   >
@@ -62,12 +58,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
     {bgType && <Background type={bgType} />}
 
     <!-- Skip Link -->
-    <Link
-      href="#main"
-      class="sr-only focus:(not-sr-only fixed start-1 top-1.5 op-20)"
-    >
-      Skip to content
-    </Link>
+    <Link href="#main" class="sr-only focus:(not-sr-only fixed start-1 top-1.5 op-20)"> Skip to content </Link>
 
     <!-- Nav Bar -->
     <NavBar />
@@ -79,7 +70,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
       <!-- Share -->
       {
         Astro.url.pathname !== withBasePath('/') && (
-          <footer class="slide-enter animate-delay-1000! prose mx-auto mt-8 print:hidden">
+          <footer class="slide-enter prose mx-auto mt-8 print:hidden animate-delay-1000!">
             <slot name="share" />
             <br />
             <BackLink />

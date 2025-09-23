@@ -1,52 +1,32 @@
-import globals from 'globals'
-import js from '@eslint/js'
-import ts from 'typescript-eslint'
-import astro from 'eslint-plugin-astro'
-import prettier from 'eslint-config-prettier/flat'
+import antfu from '@antfu/eslint-config'
 
-export default ts.config(
-  {
-    // https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-    ignores: ['dist/', '.astro/', '.local/'],
+const config = await antfu({
+  autoRenamePlugins: false,
+  formatters: {
+    astro: false,
+    markdown: 'prettier',
   },
-  {
-    // https://eslint.org/docs/latest/use/configure/language-options
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
+  typescript: {
+    tsconfigPath: 'tsconfig.json',
+
   },
-  js.configs.recommended,
-  ts.configs.eslintRecommended,
-  ts.configs.recommended,
-  ts.configs.stylistic,
-  astro.configs.recommended,
-  astro.configs['jsx-a11y-recommended'],
-  prettier,
-  {
-    rules: {
-      // https://typescript-eslint.io/rules/no-unused-vars/
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          args: 'all',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      // https://eslint.org/docs/latest/rules/no-unused-expressions
-      '@typescript-eslint/no-unused-expressions': [
-        'error',
-        { allowTernary: true },
-      ],
-    },
-  }
-)
+  unocss: true,
+  astro: true,
+}, {
+  name: 'stylistic overrides',
+  rules: {
+    'antfu/if-newline': 'off',
+    'style/operator-linebreak': 'off',
+    'style/brace-style': ['error', '1tbs', { allowSingleLine: false }],
+    'ts/strict-boolean-expressions': 'off',
+  },
+}, {
+  name: 'pages top-level await is acceptable',
+  files: [
+    './src/pages/**/*.ts',
+  ],
+  rules: {
+    'antfu/no-top-level-await': 'off',
+  },
+})
+export default config

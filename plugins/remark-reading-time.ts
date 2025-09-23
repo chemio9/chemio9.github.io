@@ -1,16 +1,16 @@
-import getReadingTime from 'reading-time'
+import type { Root } from 'mdast'
+import type { Transformer } from 'unified'
 import { toString } from 'mdast-util-to-string'
+import getReadingTime from 'reading-time'
 
 /**
  * Used to add a reading time property to the frontmatter of your Markdown or MDX files.
  *
  * @see https://docs.astro.build/en/recipes/reading-time/
  */
-function remarkReadingTime() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+function remarkReadingTime(): Transformer<Root> {
   return (tree, file) => {
-    const { frontmatter } = file.data.astro
+    const frontmatter = file.data.astro!.frontmatter!
     if (frontmatter.minutesRead || frontmatter.minutesRead === 0) return
 
     const textOnPage = toString(tree)

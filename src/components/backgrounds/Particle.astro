@@ -2,14 +2,11 @@
 // inspired by: https://github.com/JulianLaval/canvas-particle-network
 ---
 
-<bg-particle
-  class="z--1 fixed top-0 bottom-0 left-0 right-0 pointer-events-none print:hidden"
->
-</bg-particle>
+<bg-particle class="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z--1 print:hidden"> </bg-particle>
 
 <script>
+  import type P5Instance from 'p5'
   import p5 from 'p5'
-  import type { default as P5Instance } from 'p5'
 
   interface Particle {
     x: number
@@ -85,10 +82,7 @@
             }
 
             p.mouseReleased = function () {
-              mouseParticle.velocity = p.createVector(
-                (p.random() - 0.5) * 2,
-                (p.random() - 0.5) * 2
-              )
+              mouseParticle.velocity = p.createVector((p.random() - 0.5) * 2, (p.random() - 0.5) * 2)
               mouseParticle = createParticle()
               mouseParticle.velocity = p.createVector(0, 0)
               particles.push(mouseParticle)
@@ -117,6 +111,7 @@
         }
       }
 
+      // eslint-disable-next-line new-cap
       this.p5Instance = new p5(sketch, this)
     }
 

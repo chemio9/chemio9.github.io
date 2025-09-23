@@ -1,11 +1,11 @@
 ---
-import TocButton from '~/components/toc/TocButton.astro'
-import TocItem from '~/components/toc/TocItem.astro'
-import { generateToc } from '~/utils/toc'
-import { FEATURES } from '~/config'
-
 import type { MarkdownHeading } from 'astro'
 import type { TocConfig } from '~/types'
+import TocButton from '~/components/toc/TocButton.astro'
+import TocItem from '~/components/toc/TocItem.astro'
+
+import { FEATURES } from '~/config'
+import { generateToc } from '~/utils/toc'
 
 type Props =
   | {
@@ -13,7 +13,7 @@ type Props =
       anchors?: never
       style?: string
     }
-  | {
+    | {
       anchors: string[]
       headings?: never
       style?: string
@@ -21,7 +21,7 @@ type Props =
 
 const { headings = [], anchors = [], style } = Astro.props
 
-const getTocConfig = () => {
+function getTocConfig() {
   const defaultConfig: TocConfig = {
     minHeadingLevel: 2,
     maxHeadingLevel: 4,
@@ -37,8 +37,7 @@ const getTocConfig = () => {
 }
 
 const isArticle = !!headings.length
-const { minHeadingLevel, maxHeadingLevel, displayPosition, displayMode } =
-  getTocConfig()
+const { minHeadingLevel, maxHeadingLevel, displayPosition, displayMode } = getTocConfig()
 const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
 ---
 
@@ -59,19 +58,13 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
     >
       <div class="toc-desktop-anchor i-ri-menu-2-fill"></div>
       <ul>
-        {
-          !!specHeadings.length &&
-            specHeadings.map((heading) => <TocItem {heading} />)
-        }
+        {!!specHeadings.length && specHeadings.map(heading => <TocItem {heading} />)}
         {!!anchors.length && <TocItem {anchors} />}
       </ul>
     </nav>
     <!-- less than 1128px -->
     <TocButton>
-      {
-        !!specHeadings.length &&
-          specHeadings.map((heading) => <TocItem {heading} />)
-      }
+      {!!specHeadings.length && specHeadings.map(heading => <TocItem {heading} />)}
       {!!anchors.length && <TocItem {anchors} />}
     </TocButton>
   </table-of-contents>
@@ -103,9 +96,7 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
       // get all belonging heading elements on the page
       const headings =
         this.#minH && this.#maxH
-          ? this.#getElements(
-              this.#getTocHeadingsSelector(this.#minH, this.#maxH)
-            )
+          ? this.#getElements(this.#getTocHeadingsSelector(this.#minH, this.#maxH))
           : this.#getElements('.toc-heading')
 
       // observe heading elements to trigger highlight change
@@ -120,8 +111,7 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
       }
     }
 
-    #onIdle = (cb: IdleRequestCallback) =>
-      (window.requestIdleCallback || ((cb) => setTimeout(cb, 1)))(cb)
+    #onIdle = (cb: IdleRequestCallback) => (window.requestIdleCallback || (cb => setTimeout(cb, 1)))(cb)
 
     #onIntersect = (entries: IntersectionObserverEntry[]) => {
       // get latest trigger heading element
@@ -133,27 +123,23 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
       // (if current heading is located below 1/4 of the viewport,
       // highlight previous heading)
       // (avoid highlight next heading when scrolling up)
-      const isLocatedBelow =
-        latestTriggerHeading.getBoundingClientRect().top >
-        window.innerHeight / 4
+      const isLocatedBelow = latestTriggerHeading.getBoundingClientRect().top > window.innerHeight / 4
       const targetHeading = isLocatedBelow
         ? this.#getPreviousHeading(this.#headingMapToc, latestTriggerHeading)
         : latestTriggerHeading
 
       // handle highlight change
       for (const tocLinkEl of this.#headingMapToc.values()) {
-        tocLinkEl.forEach((item) => item.removeAttribute('aria-current'))
+        tocLinkEl.forEach(item => item.removeAttribute('aria-current'))
       }
       if (targetHeading) {
         const currentLink = this.#headingMapToc.get(targetHeading)
-        currentLink?.forEach((item) =>
-          item.setAttribute('aria-current', 'true')
-        )
+        currentLink?.forEach(item => item.setAttribute('aria-current', 'true'))
       }
     }
 
     #getHeadingLevel = (level: string | undefined) => {
-      return level ? parseInt(level, 10) : undefined
+      return level ? Number.parseInt(level, 10) : undefined
     }
 
     #getElements = (selector: string, fromDocument = true) => {
@@ -179,25 +165,16 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
     }
 
     // returns a CSS selector string for the specified heading levels
-    #getTocHeadingsSelector = (
-      minH: number,
-      maxH: number,
-      baseSelector = ''
-    ) => {
+    #getTocHeadingsSelector = (minH: number, maxH: number, baseSelector = '') => {
       const levelSelectors = []
       for (let i = minH; i <= maxH; i++) {
-        baseSelector
-          ? levelSelectors.push(`${baseSelector} h${i}`)
-          : levelSelectors.push(`h${i}`)
+        baseSelector ? levelSelectors.push(`${baseSelector} h${i}`) : levelSelectors.push(`h${i}`)
       }
 
       return levelSelectors.join(', ')
     }
 
-    #getPreviousHeading = (
-      headingMapToc: Map<Element, HTMLAnchorElement[]>,
-      curHeading: Element
-    ) => {
+    #getPreviousHeading = (headingMapToc: Map<Element, HTMLAnchorElement[]>, curHeading: Element) => {
       let prevHeading = null
 
       for (const h of headingMapToc.keys()) {

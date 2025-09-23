@@ -2,14 +2,11 @@
 // inspired by: https://github.com/antfu/antfu.me/blob/main/src/components/ArtDots.vue
 ---
 
-<bg-dot
-  class="z--1 fixed top-0 bottom-0 left-0 right-0 pointer-events-none print:hidden"
->
-</bg-dot>
+<bg-dot class="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z--1 print:hidden"> </bg-dot>
 
 <script>
+  import type P5Instance from 'p5'
   import p5 from 'p5'
-  import type { default as P5Instance } from 'p5'
 
   class BgDotElement extends HTMLElement {
     p5Instance: P5Instance | null = null
@@ -24,7 +21,13 @@
         const height = window.innerHeight
 
         const existingPoints = new Set()
-        const points: { x: number; y: number; opacity: number }[] = []
+
+        interface Point {
+          x: number
+          y: number
+          opacity: number
+        }
+        const points: Point[] = []
 
         function getForceOnPoint(x: number, y: number, z: number) {
           return (p.noise(x / SCALE, y / SCALE, z) - 0.5) * 2 * p.TWO_PI
@@ -64,18 +67,14 @@
 
             const isDark = document.documentElement.classList.contains('dark')
             const color = isDark ? 55 : 200
-            p.stroke(
-              color,
-              color,
-              color,
-              (Math.abs(p.cos(rad)) * 0.8 + 0.2) * point.opacity * 255
-            )
+            p.stroke(color, color, color, (Math.abs(p.cos(rad)) * 0.8 + 0.2) * point.opacity * 255)
             p.strokeWeight(2)
             p.point(nx, ny)
           }
         }
       }
 
+      // eslint-disable-next-line new-cap
       this.p5Instance = new p5(sketch, this)
     }
 

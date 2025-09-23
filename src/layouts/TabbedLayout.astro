@@ -1,9 +1,9 @@
 ---
+import type { Tabs } from '~/types'
 import Link from '~/components/base/Link.astro'
-import { ensureTrailingSlash, resolvePath } from '~/utils/path'
 import { UI } from '~/config'
 
-import type { Tabs } from '~/types'
+import { ensureTrailingSlash, resolvePath } from '~/utils/path'
 
 interface Props {
   subtitle?: string
@@ -12,10 +12,7 @@ interface Props {
 const { subtitle } = Astro.props
 
 let tabs: Tabs
-if (
-  !UI.tabbedLayoutTabs ||
-  (Array.isArray(UI.tabbedLayoutTabs) && UI.tabbedLayoutTabs.length === 0)
-) {
+if (!UI.tabbedLayoutTabs || (Array.isArray(UI.tabbedLayoutTabs) && UI.tabbedLayoutTabs.length === 0)) {
   throw new Error('`UI.tabbedLayoutTabs`` is not configured.')
 } else {
   tabs = UI.tabbedLayoutTabs
@@ -26,13 +23,9 @@ const isActive = (href: string) => currentPath === resolvePath(href)
 ---
 
 <nav id="nav-tabs" class="prose mx-auto mb-8" aria-label="Page sections">
-  <div
-    u-flex="~ gap-3 lt-sm:(col wrap gap-1)"
-    class="mb-0 text-3xl select-none"
-    role="tablist"
-  >
+  <div u-flex="~ gap-3 lt-sm:(col wrap gap-1)" class="mb-0 select-none text-3xl" role="tablist">
     {
-      tabs.map((tab) => (
+      tabs.map(tab => (
         <Link
           class:list={{
             'link op-transition!': true,
@@ -41,16 +34,14 @@ const isActive = (href: string) => currentPath === resolvePath(href)
           }}
           href={resolvePath(tab.path)}
           role="tab"
-          aria-current={
-            Astro.url.pathname === resolvePath(tab.path) ? 'page' : false
-          }
+          aria-current={Astro.url.pathname === resolvePath(tab.path) ? 'page' : false}
         >
           {tab.title}
         </Link>
       ))
     }
   </div>
-  {subtitle && <p class="mt-4! op-50 italic">{subtitle}</p>}
+  {subtitle && <p class="italic op-50 mt-4!">{subtitle}</p>}
 </nav>
 <div class="prose mx-auto">
   <slot />

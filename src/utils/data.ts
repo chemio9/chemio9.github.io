@@ -1,28 +1,74 @@
-import { getCollection, render } from 'astro:content'
-import {
-  AppBskyEmbedImages,
-  AppBskyEmbedVideo,
-  AppBskyEmbedExternal,
-  AppBskyEmbedRecord,
-  AppBskyEmbedRecordWithMedia,
-} from '@atproto/api'
-import { atUriToPostUri } from 'astro-loader-bluesky-posts'
-
-import { resolvePath } from './path'
-
+/* eslint-disable ts/no-unsafe-return */
+/* eslint-disable ts/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-argument */
+/* eslint-disable ts/no-unsafe-assignment */
 import type { CollectionEntry, CollectionKey } from 'astro:content'
-import type { CardItemData } from '~/components/views/CardItem.astro'
+
 import type { GitHubView } from '~/types'
 
-type CollectionEntryList<K extends CollectionKey = CollectionKey> =
-  CollectionEntry<K>[]
+import {
+  AppBskyEmbedExternal,
+  AppBskyEmbedImages,
+  AppBskyEmbedRecord,
+  AppBskyEmbedRecordWithMedia,
+  AppBskyEmbedVideo,
+} from '@atproto/api'
+
+import { atUriToPostUri } from 'astro-loader-bluesky-posts'
+import { getCollection, render } from 'astro:content'
+import { resolvePath } from './path'
+
+/// PERF: eslint doesn't support import types from astro file.
+interface ImageData {
+  src: string
+  alt: string
+}
+
+interface VideoData {
+  src: string
+  alt: string
+  poster: string
+}
+
+interface ExternalData {
+  uri: string
+  title: string
+  description: string
+  img: string
+}
+
+interface QuoteData {
+  uri: string
+  text: string
+  author: {
+    link: string
+    avatar: string
+    name: string
+    handle: string
+  }
+}
+
+export interface CardItemData {
+  date?: Date | string
+  text?: string
+  html?: string
+  link?: string
+  images?: ImageData[]
+  video?: VideoData
+  external?: ExternalData
+  quote?: QuoteData
+  details?: string[]
+}
+
+type CollectionEntryList<K extends CollectionKey = CollectionKey>
+  = CollectionEntry<K>[]
 
 /**
  * Retrieves filtered posts from the specified content collection.
  * In production, it filters out draft posts.
  */
 export async function getFilteredPosts(collection: 'blog' | 'changelog') {
-  return await getCollection(collection, ({ data }) => {
+  return getCollection(collection, ({ data }) => {
     return import.meta.env.PROD ? !data.draft : true
   })
 }
@@ -31,10 +77,10 @@ export async function getFilteredPosts(collection: 'blog' | 'changelog') {
  * Sorts an array of posts by their publication date in descending order.
  */
 export function getSortedPosts(
-  posts: CollectionEntryList<'blog' | 'changelog'>
+  posts: CollectionEntryList<'blog' | 'changelog'>,
 ) {
   return posts.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   )
 }
 
@@ -44,7 +90,7 @@ export function getSortedPosts(
  */
 export function matchLogo(
   input: string,
-  logos: GitHubView['mainLogoOverrides'] | GitHubView['subLogoMatches']
+  logos: GitHubView['mainLogoOverrides'] | GitHubView['subLogoMatches'],
 ) {
   for (const [pattern, logo] of logos) {
     if (typeof pattern === 'string') {
@@ -64,16 +110,7 @@ export function matchLogo(
  * Extracts the package name (before the `@` version part) from a `tagName`.
  */
 export function extractPackageName(tagName: string) {
-  const match = tagName.match(/(^@?[^@]+?)(?:@)/)
-  if (match) return match[1]
-  return tagName
-}
-
-/**
- * Extracts the version number from a `tagName`.
- */
-export function extractVersionNum(tagName: string) {
-  const match = tagName.match(/.+(\d+\.\d+\.\d+(?:-[\w.]+)?)(?:\s|$)/)
+  const match = tagName.match(/(^@?[^@]+)@/)
   if (match) return match[1]
   return tagName
 }
@@ -82,9 +119,9 @@ export function extractVersionNum(tagName: string) {
  * Processes the version number and return the highlighted and non-highlighted parts.
  */
 export function processVersion(
-  versionNum: string
+  versionNum: string,
 ): ['major' | 'minor' | 'patch' | 'pre', string, string] {
-  const parts = versionNum.split(/(\.)/g)
+  const parts = versionNum.split(/(\.)/)
   let highlightedIndex = -1
   let versionType: 'major' | 'minor' | 'patch' | 'pre'
 
@@ -126,31 +163,34 @@ export function processBlueskyPosts(data: CollectionEntryList<'highlights'>) {
 
     const card: CardItemData = {
       date: indexedAt,
-      html: html,
-      link: link,
+      html,
+      link,
     }
 
     if (embed) {
-      if (AppBskyEmbedImages.isView(embed))
-        card.images = embed.images.map((img) => ({
+      if (AppBskyEmbedImages.isView(embed)) {
+        card.images = embed.images.map(img => ({
           src: img.thumb,
           alt: img.alt ?? '',
         }))
+      }
 
-      if (AppBskyEmbedVideo.isView(embed))
+      if (AppBskyEmbedVideo.isView(embed)) {
         card.video = {
           src: `https://bsky.social/xrpc/com.atproto.sync.getBlob?did=${author.did}&cid=${embed.cid}`,
           alt: embed.alt ?? '',
           poster: embed.thumbnail ?? '',
         }
+      }
 
-      if (AppBskyEmbedExternal.isView(embed))
+      if (AppBskyEmbedExternal.isView(embed)) {
         card.external = {
           uri: embed.external.uri,
           title: embed.external.title ?? '',
           description: embed.external.description ?? '',
           img: embed.external.thumb ?? '',
         }
+      }
 
       if (AppBskyEmbedRecord.isView(embed)) {
         const { uri, value, author } = embed.record
@@ -171,13 +211,14 @@ export function processBlueskyPosts(data: CollectionEntryList<'highlights'>) {
         const { record, media } = embed
 
         if (media) {
-          if (AppBskyEmbedImages.isView(media))
-            card.images = media.images.map((img) => ({
+          if (AppBskyEmbedImages.isView(media)) {
+            card.images = media.images.map(img => ({
               src: img.thumb ?? '',
               alt: img.alt ?? '',
             }))
+          }
 
-          if (AppBskyEmbedVideo.isView(media))
+          if (AppBskyEmbedVideo.isView(media)) {
             card.video = {
               // @ts-expect-error (ignore)
               src: `https://bsky.social/xrpc/com.atproto.sync.getBlob?did=${author.did}&cid=${media.cid}`,
@@ -186,14 +227,16 @@ export function processBlueskyPosts(data: CollectionEntryList<'highlights'>) {
               // @ts-expect-error (ignore)
               poster: media.thumbnail ?? '',
             }
+          }
 
-          if (AppBskyEmbedExternal.isView(media))
+          if (AppBskyEmbedExternal.isView(media)) {
             card.external = {
               uri: media.external.uri,
               title: media.external.title ?? '',
               description: media.external.description ?? '',
               img: media.external.thumb ?? '',
             }
+          }
         }
 
         // @ts-expect-error (ignore)
@@ -216,7 +259,7 @@ export function processBlueskyPosts(data: CollectionEntryList<'highlights'>) {
     }
 
     if (replies && replies.length > 0) {
-      card.details = replies.map((reply) => reply.html)
+      card.details = replies.map(reply => reply.html)
     }
 
     cards.push(card)
@@ -232,7 +275,7 @@ export async function getShortsFromBlog(data: CollectionEntryList<'blog'>) {
   const cards: CardItemData[] = []
   const basePath = resolvePath('/blog')
   const sortedData = data.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   )
 
   for (const item of sortedData) {
@@ -244,7 +287,7 @@ export async function getShortsFromBlog(data: CollectionEntryList<'blog'>) {
       cards.push({
         link: `${basePath}/${slug}`,
         text: title,
-        date: date,
+        date,
       })
     } else {
       const { headings } = await render(item)
@@ -276,12 +319,12 @@ export async function getShortsFromBlog(data: CollectionEntryList<'blog'>) {
 
       const itemCards = headings
         .filter(
-          (h) => h.depth === neededHeadingLevel && h.text !== 'Wrapping Up'
+          h => h.depth === neededHeadingLevel && h.text !== 'Wrapping Up',
         )
-        .map((h) => ({
+        .map(h => ({
           link: `${basePath}${slug}/#${h.slug}`,
           text: `${processedTitle}: ${h.text}`,
-          date: date,
+          date,
         }))
 
       cards.push(...itemCards)

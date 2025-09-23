@@ -1,11 +1,11 @@
-import { defineConfig } from 'astro/config'
-import sitemap from '@astrojs/sitemap'
-import robotsTxt from 'astro-robots-txt'
-import unocss from 'unocss/astro'
-import astroExpressiveCode from 'astro-expressive-code'
 import mdx from '@astrojs/mdx'
+import sitemap from '@astrojs/sitemap'
+import astroExpressiveCode from 'astro-expressive-code'
+import robotsTxt from 'astro-robots-txt'
+import { defineConfig } from 'astro/config'
+import unocss from 'unocss/astro'
 
-import { remarkPlugins, rehypePlugins } from './plugins'
+import { rehypePlugins, remarkPlugins } from './plugins'
 import { SITE } from './src/config'
 
 // https://docs.astro.build/en/reference/configuration-reference/

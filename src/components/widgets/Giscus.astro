@@ -26,29 +26,21 @@
     giscusTemplateScript.setAttribute(key, value)
   })
 
-  const removeOldGiscus = () => {
-    document
-      .querySelectorAll('iframe.giscus-frame')
-      .forEach((el) => el.remove())
+  function removeOldGiscus() {
+    document.querySelectorAll('iframe.giscus-frame').forEach(el => el.remove())
 
-    document
-      .querySelectorAll('script#giscus-script')
-      .forEach((el) => el.remove())
+    document.querySelectorAll('script#giscus-script').forEach(el => el.remove())
   }
 
-  const addGiscusScript = () => {
+  function addGiscusScript() {
     if (!document.querySelector('.giscus')) return
 
     // Always clone a fresh <script> to ensure it executes again;
     // reused or previously inserted scripts won't run
-    const clonedScript = giscusTemplateScript.cloneNode(
-      true
-    ) as HTMLScriptElement
+    const clonedScript = giscusTemplateScript.cloneNode(true) as HTMLScriptElement
     clonedScript.setAttribute(
       'data-theme',
-      document.documentElement.classList.contains('dark')
-        ? giscusThemeDark
-        : giscusThemeLight
+      document.documentElement.classList.contains('dark') ? giscusThemeDark : giscusThemeLight,
     )
     document.body.appendChild(clonedScript)
   }

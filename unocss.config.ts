@@ -1,39 +1,39 @@
+import type {
+  IconNavItem,
+  IconSocialItem,
+  ResponsiveNavItem,
+  ResponsiveSocialItem,
+} from './src/types'
+
+import type { ProjectSchema } from '~/content/schema'
+
 import {
   defineConfig,
-  presetWind3,
+  extractorSplit,
   presetAttributify,
   presetIcons,
   presetWebFonts,
+  presetWind3,
   transformerDirectives,
   transformerVariantGroup,
-  extractorSplit,
 } from 'unocss'
-
 import { UI } from './src/config'
-
-import type {
-  IconNavItem,
-  ResponsiveNavItem,
-  IconSocialItem,
-  ResponsiveSocialItem,
-} from './src/types'
-import type { ProjectSchema } from '~/content/schema'
 
 const { internalNavs, socialLinks, githubView } = UI
 const navIcons = internalNavs
   .filter(
-    (item) =>
-      item.displayMode !== 'alwaysText' &&
-      item.displayMode !== 'textHiddenOnMobile'
+    item =>
+      item.displayMode !== 'alwaysText'
+      && item.displayMode !== 'textHiddenOnMobile',
   )
-  .map((item) => (item as IconNavItem | ResponsiveNavItem).icon)
+  .map(item => (item as IconNavItem | ResponsiveNavItem).icon)
 const socialIcons = socialLinks
   .filter(
-    (item) =>
-      item.displayMode !== 'alwaysText' &&
-      item.displayMode !== 'textHiddenOnMobile'
+    item =>
+      item.displayMode !== 'alwaysText'
+      && item.displayMode !== 'textHiddenOnMobile',
   )
-  .map((item) => (item as IconSocialItem | ResponsiveSocialItem).icon)
+  .map(item => (item as IconSocialItem | ResponsiveSocialItem).icon)
 
 // const projectIcons = projecstData.map((item) => item.icon)
 
@@ -44,9 +44,9 @@ const githubVersionColor: Record<string, string> = {
   pre: 'bg-teal/15 text-teal-7 dark:text-teal-3',
 }
 const githubVersionClass = Object.keys(githubVersionColor).map(
-  (k) => `github-${k}`
+  k => `github-${k}`,
 )
-const githubSubLogos = githubView.subLogoMatches.map((item) => item[1])
+const githubSubLogos = githubView.subLogoMatches.map(item => item[1])
 
 export default defineConfig({
   // Astro 5 no longer pipes `src/content/**/*.{md,mdx}` through Vite
@@ -68,16 +68,14 @@ export default defineConfig({
 
   extractors: [
     {
-      name: "antfustyle-astro-theme/data-extractor",
+      name: 'antfustyle-astro-theme/data-extractor',
       extract(ctx) {
-        if (!ctx.id)
+        if (!(ctx.id ?? ''))
           return undefined
-        if (ctx.id?.endsWith("projects/data.json")) {
+        if (ctx.id?.endsWith('projects/data.json')) {
           try {
-            return (JSON.parse(ctx.code) as ProjectSchema[]).map((v) => v.icon)
-          }
-          // eslint-disable-next-line no-empty
-          catch { }
+            return (JSON.parse(ctx.code) as ProjectSchema[]).map(v => v.icon)
+          } catch { }
         }
       },
     },
@@ -86,9 +84,12 @@ export default defineConfig({
 
   // will be deep-merged to the default theme
   extendTheme: (theme) => {
+    // eslint-disable-next-line ts/no-unsafe-return
     return {
       ...theme,
+      // eslint-disable-next-line ts/no-unsafe-assignment
       breakpoints: {
+        // eslint-disable-next-line ts/no-unsafe-member-access
         ...theme.breakpoints,
         lgp: '1128px',
       },
@@ -102,7 +103,7 @@ export default defineConfig({
   shortcuts: [
     [
       /^(\w+)-transition(?:-(\d+))?$/,
-      (match) =>
+      match =>
         `transition-${match[1] === 'op' ? 'opacity' : match[1]} duration-${match[2] ? match[2] : '300'} ease-in-out`,
     ],
     [

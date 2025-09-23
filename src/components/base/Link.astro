@@ -1,6 +1,6 @@
 ---
-import { UI } from '~/config'
 import type { HTMLAttributes } from 'astro/types'
+import { UI } from '~/config'
 
 interface Props extends HTMLAttributes<'a'> {
   href?: string
@@ -11,42 +11,24 @@ interface Props extends HTMLAttributes<'a'> {
   children: HTMLElement | HTMLElement[] | string
 }
 
-const {
-  href,
-  title,
-  rel,
-  external = false,
-  enableNewTabWarning = false,
-  class: className,
-  ...rest
-} = Astro.props
+const { href, title, rel, external = false, enableNewTabWarning = false, class: className, ...rest } = Astro.props
 
 const { externalLink } = UI
 
 const openInNewTab = external && externalLink.newTab
 const targetAttr = openInNewTab ? '_blank' : undefined
 const relAttr =
-  rel || openInNewTab
-    ? `${openInNewTab ? 'noopener noreferrer' : ''} ${rel ? rel : ''}`.trim()
-    : undefined
-const ariaLabel = title ? title : openInNewTab ? 'Open in new tab' : undefined
+  rel || openInNewTab ? `${openInNewTab ? 'noopener noreferrer' : ''} ${rel || ''}`.trim() : undefined
+const ariaLabel = title || (openInNewTab ? 'Open in new tab' : undefined)
 
 const showCursor =
-  openInNewTab &&
-  enableNewTabWarning &&
-  externalLink.cursorType &&
-  externalLink.cursorType !== 'pointer'
+  openInNewTab && enableNewTabWarning && externalLink.cursorType && externalLink.cursorType !== 'pointer'
 
-const showIcon =
-  openInNewTab && enableNewTabWarning && externalLink.showNewTabIcon
+const showIcon = openInNewTab && enableNewTabWarning && externalLink.showNewTabIcon
 ---
 
 <a
-  class:list={[
-    'op-60 no-underline hover:op-100',
-    { 'external-link-cursor': showCursor },
-    className,
-  ]}
+  class:list={['op-60 no-underline hover:op-100', { 'external-link-cursor': showCursor }, className]}
   {href}
   {title}
   aria-label={ariaLabel}
@@ -57,26 +39,15 @@ const showIcon =
   {
     Astro.slots.has('default') && (
       <>
-        <slot />{showIcon && (
-          <span
-            u-i-carbon-arrow-up-right
-            class="new-tab-icon ml-0!"
-            aria-hidden="true"
-          />
-        )}
+        <slot />
+        {showIcon && <span u-i-carbon-arrow-up-right class="new-tab-icon ml-0!" aria-hidden="true" />}
       </>
     )
   }{
     Astro.slots.has('title') && (
-      <span class="text-lg leading-1.3em align-middle">
+      <span class="align-middle text-lg leading-1.3em">
         <slot name="title" />
-        {showIcon && (
-          <span
-            u-i-carbon-arrow-up-right
-            class="new-tab-icon ml--1! mb-1.8!"
-            aria-hidden="true"
-          />
-        )}
+        {showIcon && <span u-i-carbon-arrow-up-right class="new-tab-icon mb-1.8! ml--1!" aria-hidden="true" />}
       </span>
     )
   }<slot name="end" /></a

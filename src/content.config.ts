@@ -1,17 +1,17 @@
-import { glob, file } from 'astro/loaders'
-import { defineCollection } from 'astro:content'
-
 import { feedLoader } from '@ascorbic/feed-loader'
-import { githubReleasesLoader } from 'astro-loader-github-releases'
-import { githubPrsLoader } from 'astro-loader-github-prs'
 import { blueskyPostsLoader } from 'astro-loader-bluesky-posts'
+
+import { githubPrsLoader } from 'astro-loader-github-prs'
+import { githubReleasesLoader } from 'astro-loader-github-releases'
+import { file, glob } from 'astro/loaders'
+import { defineCollection } from 'astro:content'
 
 import {
   pageSchema,
+  photoSchema,
   postSchema,
   projectSchema,
   streamSchema,
-  photoSchema,
 } from '~/content/schema'
 
 const pages = defineCollection({

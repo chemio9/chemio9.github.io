@@ -1,8 +1,8 @@
 ---
 import Link from '~/components/base/Link.astro'
 
-import { withBasePath } from '~/utils/path'
 import { formatDate } from '~/utils/datetime'
+import { withBasePath } from '~/utils/path'
 
 interface Props {
   idx: number
@@ -17,27 +17,16 @@ interface Props {
   platform?: string
 }
 
-const {
-  idx,
-  redirect,
-  collectionType,
-  postSlug,
-  title,
-  video,
-  radio,
-  date,
-  minutesRead,
-  platform,
-} = Astro.props
+const { idx, redirect, collectionType, postSlug, title, video, radio, date, minutesRead, platform } = Astro.props
 ---
 
 <div class="slide-enter" style={{ '--enter-stage': idx }}>
   <Link
     u-flex="~ items-center lt-md:(col items-start) gap-2"
-    class="border-b-none! mb-6 mt-2 op-transition!"
+    class="mb-6 mt-2 border-b-none! op-transition!"
     href={redirect ?? withBasePath(`/${collectionType}/${postSlug}/`)}
-    external={redirect ? true : false}
-    enableNewTabWarning={redirect ? true : false}
+    external={!!redirect}
+    enableNewTabWarning={!!redirect}
   >
     <Fragment slot="title">{title}</Fragment>
     <span slot="end" u-flex="~ gap-2 items-center">
@@ -45,7 +34,7 @@ const {
         video && (
           <span
             u-i-ri-film-line
-            class="flex-none op-50 align-middle"
+            class="flex-none align-middle op-50"
             title="Provided in video"
             aria-label="Provided in video"
           />
@@ -55,24 +44,21 @@ const {
         radio && (
           <span
             u-i-ri-radio-line
-            class="flex-none op-50 align-middle"
+            class="flex-none align-middle op-50"
             title="Provided in radio"
             aria-label="Provided in radio"
           />
         )
       }
-      <time
-        class="op-50 text-sm ws-nowrap"
-        datetime={new Date(date).toISOString()}
-      >
+      <time class="ws-nowrap text-sm op-50" datetime={new Date(date).toISOString()}>
         {formatDate(date, false)}
       </time>
       {
         typeof minutesRead === 'number' && minutesRead > 0 && (
-          <span class="op-40 text-sm ws-nowrap">· {minutesRead} min</span>
+          <span class="ws-nowrap text-sm op-40">· {minutesRead} min</span>
         )
       }
-      {platform && <span class="op-40 text-sm ws-nowrap">· {platform}</span>}
+      {platform && <span class="ws-nowrap text-sm op-40">· {platform}</span>}
     </span>
   </Link>
 </div>

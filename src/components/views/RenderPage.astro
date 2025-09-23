@@ -1,10 +1,10 @@
 ---
-import { getEntry, render } from 'astro:content'
-
-import Toc from '~/components/toc/Toc.astro'
-import { FEATURES } from '~/config'
-
 import type { CollectionKey } from 'astro:content'
+
+import { getEntry, render } from 'astro:content'
+import Toc from '~/components/toc/Toc.astro'
+
+import { FEATURES } from '~/config'
 
 interface Props {
   collectionType: CollectionKey

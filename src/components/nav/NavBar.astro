@@ -1,11 +1,11 @@
 ---
-import LogoButton from '~/components/widgets/LogoButton.astro'
 import Divider from '~/components/base/Divider.astro'
-import SearchSwitch from '~/components/widgets/SearchSwitch.astro'
-import ThemeSwitch from '~/components/widgets/ThemeSwitch.astro'
-import RssLink from '~/components/widgets/RssLink.astro'
 import NavItem from '~/components/nav/NavItem.astro'
 import NavSwitch from '~/components/nav/NavSwitch.astro'
+import LogoButton from '~/components/widgets/LogoButton.astro'
+import RssLink from '~/components/widgets/RssLink.astro'
+import SearchSwitch from '~/components/widgets/SearchSwitch.astro'
+import ThemeSwitch from '~/components/widgets/ThemeSwitch.astro'
 
 import { UI } from '~/config'
 
@@ -14,45 +14,44 @@ const { left, right, mergeOnMobile } = navBarLayout
 
 for (const item of new Set(left)) {
   if (new Set(right).has(item)) {
-    throw new Error(
-      `Duplicate '${item}' found in both 'UI.navBarLayout.left' and 'UI.navBarLayout.right'.`
-    )
+    throw new Error(`Duplicate '${item}' found in both 'UI.navBarLayout.left' and 'UI.navBarLayout.right'.`)
   }
 }
 ---
 
-<header
-  class={`flex items-center gap-6 p-[1.75rem_2rem_2rem] ${mergeOnMobile ? 'lt-md:px-7' : 'lt-md:(px-6 gap-3)'}`}
->
+<header class={`flex items-center gap-6 p-[1.75rem_2rem_2rem] ${mergeOnMobile ? 'lt-md:px-7' : 'lt-md:(px-6 gap-3)'}`}>
   <LogoButton />
   <nav
-    class={`flex items-center gap-4.8 w-full lt-md:justify-end
-    ${left.length !== 0 ? (right.length !== 0 ? 'justify-between' : '') : 'justify-end'}`}
+    class={`w-full flex items-center gap-4.8 lt-md:justify-end ${left.length !== 0 ? (right.length !== 0 ? 'justify-between' : '') : 'justify-end'}`}
     aria-label="Main menu"
   >
     {
       left.length !== 0 && (
-        <div
-          class={`grid grid-flow-col items-center gap-4.8 print:op-0 ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}
-        >
-          {left.map((key) =>
-            key === 'hr' ? (
+        <div class={`grid grid-flow-col items-center gap-4.8 print:op-0 ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}>
+          {left.map(key =>
+            key === 'hr'
+? (
               <Divider class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'searchButton' ? (
-              <SearchSwitch />
-            ) : key === 'themeButton' ? (
-              <ThemeSwitch />
-            ) : key === 'rssLink' ? (
-              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'internalNavs' ? (
-              internalNavs.map((item) => (
-                <NavItem type="internal" {item} {mergeOnMobile} />
-              ))
-            ) : (
-              socialLinks.map((item) => (
-                <NavItem type="social" {item} {mergeOnMobile} />
-              ))
             )
+: key === 'searchButton'
+? (
+              <SearchSwitch />
+            )
+: key === 'themeButton'
+? (
+              <ThemeSwitch />
+            )
+: key === 'rssLink'
+? (
+              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
+            )
+: key === 'internalNavs'
+? (
+              internalNavs.map(item => <NavItem type="internal" {item} {mergeOnMobile} />)
+            )
+: (
+              socialLinks.map(item => <NavItem type="social" {item} {mergeOnMobile} />)
+            ),
           )}
         </div>
       )
@@ -60,28 +59,32 @@ for (const item of new Set(left)) {
     {
       right.length !== 0 && (
         <div
-          class={`grid grid-flow-col items-center gap-4.8 print:op-0
-              ${!right.includes('themeButton') && !right.includes('searchButton') && 'lt-md:hidden'}
-              ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}
+          class={`grid grid-flow-col items-center gap-4.8 print:op-0 ${!right.includes('themeButton') && !right.includes('searchButton') && 'lt-md:hidden'}  ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}
         >
-          {right.map((key) =>
-            key === 'hr' ? (
+          {right.map(key =>
+            key === 'hr'
+? (
               <Divider class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'searchButton' ? (
-              <SearchSwitch />
-            ) : key === 'themeButton' ? (
-              <ThemeSwitch />
-            ) : key === 'rssLink' ? (
-              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'internalNavs' ? (
-              internalNavs.map((item) => (
-                <NavItem type="internal" {item} {mergeOnMobile} />
-              ))
-            ) : (
-              socialLinks.map((item) => (
-                <NavItem type="social" {item} {mergeOnMobile} />
-              ))
             )
+: key === 'searchButton'
+? (
+              <SearchSwitch />
+            )
+: key === 'themeButton'
+? (
+              <ThemeSwitch />
+            )
+: key === 'rssLink'
+? (
+              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
+            )
+: key === 'internalNavs'
+? (
+              internalNavs.map(item => <NavItem type="internal" {item} {mergeOnMobile} />)
+            )
+: (
+              socialLinks.map(item => <NavItem type="social" {item} {mergeOnMobile} />)
+            ),
           )}
         </div>
       )
@@ -91,43 +94,15 @@ for (const item of new Set(left)) {
         <NavSwitch>
           <Fragment slot="text">
             {internalNavs.length !== 0 &&
-              internalNavs.map((item) => (
-                <NavItem
-                  type="internal"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="text"
-                />
-              ))}
+              internalNavs.map(item => <NavItem type="internal" {item} {mergeOnMobile} mobileItemType="text" />)}
             {socialLinks.length !== 0 &&
-              socialLinks.map((item) => (
-                <NavItem
-                  type="social"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="text"
-                />
-              ))}
+              socialLinks.map(item => <NavItem type="social" {item} {mergeOnMobile} mobileItemType="text" />)}
           </Fragment>
           <Fragment slot="icon">
             {internalNavs.length !== 0 &&
-              internalNavs.map((item) => (
-                <NavItem
-                  type="internal"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="icon"
-                />
-              ))}
+              internalNavs.map(item => <NavItem type="internal" {item} {mergeOnMobile} mobileItemType="icon" />)}
             {socialLinks.length !== 0 &&
-              socialLinks.map((item) => (
-                <NavItem
-                  type="social"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="icon"
-                />
-              ))}
+              socialLinks.map(item => <NavItem type="social" {item} {mergeOnMobile} mobileItemType="icon" />)}
             <RssLink />
           </Fragment>
         </NavSwitch>

@@ -1,11 +1,28 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", ".local"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-    }
-  }
+      "~/*": [
+        "./src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      },
+      {
+        "name": "@mdx-js/typescript-plugin"
+      }
+    ]
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    ".local"
+  ]
 }

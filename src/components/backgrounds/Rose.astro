@@ -8,27 +8,15 @@ const roses = [
 
 <div
   id="rose"
-  class="z--1 fixed top-0 bottom-0 left-0 right-0
-    w-full h-full
-    op-50 dark:op-100
-    pointer-events-none
-    print:hidden"
+  class="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z--1 h-full w-full op-50 print:hidden dark:op-100"
   style="mask-image: radial-gradient(circle, transparent, black);"
 >
   {
-    roses.map((rose) => (
-      <div
-        id={`rose-${rose.id}`}
-        class="absolute w-200px h-200px op-0 translate--50%"
-      >
+    roses.map(rose => (
+      <div id={`rose-${rose.id}`} class="absolute h-200px w-200px translate--50% op-0">
         {Array.from({ length: rose.petals }, (_, i) => (
           <div
-            class="petal absolute left-50% h-full w-full
-              transition-(transform duration-60000 ease-out) origin-bottom-center
-              before:(content-empty absolute w-full h-full rounded-(tl-[50%_35%] br-[35%_50%] tr-[45%] bl-[10%])
-              bg-[radial-gradient(ellipse_at_bottom_left,#ffffff_0%,#fefefe_70%,#88888855_95%)]
-              dark:bg-[radial-gradient(ellipse_at_bottom_left,#000000_0%,#000000_70%,#77777755_85%)]
-              transform-rotate-[-45deg])"
+            class="petal absolute left-50% h-full w-full origin-bottom-center transition-(transform duration-60000 ease-out) before:(absolute h-full w-full transform-rotate-[-45deg] rounded-bl-[10%] rounded-br-[35%_50%] rounded-tl-[50%_35%] rounded-tr-[45%] bg-[radial-gradient(ellipse_at_bottom_left,#ffffff_0%,#fefefe_70%,#88888855_95%)] content-empty dark:bg-[radial-gradient(ellipse_at_bottom_left,#000000_0%,#000000_70%,#77777755_85%)])"
             style={{
               'z-index': rose.petals - i,
               'transform': `scale(${i * rose.scale}, ${i * rose.scale}) rotate(${i * rose.rotation}deg)`,
@@ -46,17 +34,11 @@ const roses = [
   }
 
   function getRandomPercentage(min, max) {
-    return (Math.random() * (max - min) + min).toFixed(2) + '%'
+    return `${(Math.random() * (max - min) + min).toFixed(2)}%`
   }
 
   if (document.getElementById('rose')) {
-    const animateRose = (
-      roseId,
-      topRange,
-      leftRange,
-      scaleRange,
-      rotationRange
-    ) => {
+    const animateRose = (roseId, topRange, leftRange, scaleRange, rotationRange) => {
       const rose = document.getElementById(roseId)
       if (!rose) return
       const petals = rose.querySelectorAll(`#${roseId} .petal`)

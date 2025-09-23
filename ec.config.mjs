@@ -1,6 +1,6 @@
-import { defineEcConfig, setLuminance, setAlpha } from 'astro-expressive-code'
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections'
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
+import { defineEcConfig, setAlpha, setLuminance } from 'astro-expressive-code'
 
 // https://expressive-code.com/reference/configuration/
 export default defineEcConfig({
@@ -19,11 +19,11 @@ export default defineEcConfig({
 
   /* Styles */
   styleOverrides: {
-    uiFontFamily: "'DM Mono', 'Input Mono', 'Fira Code', 'monospace'",
+    uiFontFamily: '\'DM Mono\', \'Input Mono\', \'Fira Code\', \'monospace\'',
     uiFontSize: '1em',
-    codeBackground: (context) =>
+    codeBackground: context =>
       context.theme.name === 'vitesse-dark' ? '#0e0e0e' : '#fafafa',
-    codeFontFamily: "'DM Mono', 'Input Mono', 'Fira Code', 'monospace'",
+    codeFontFamily: '\'DM Mono\', \'Input Mono\', \'Fira Code\', \'monospace\'',
     codeFontSize: '14.72px',
     codeLineHeight: '1.4',
     codePaddingBlock: '0.8571429em',
@@ -49,15 +49,15 @@ export default defineEcConfig({
     /* Collapsible Sections */
     collapsibleSections: {
       closedBackgroundColor: ({ theme }) =>
-        setAlpha(theme.colors['editor.foldBackground'], 0.06) ||
-        'rgb(84 174 255 / 20%)',
+        setAlpha(theme.colors['editor.foldBackground'], 0.06)
+        || 'rgb(84 174 255 / 20%)',
     },
   },
 
   /* Theme */
   themes: ['vitesse-dark', 'vitesse-light'],
   themeCssRoot: ':root',
-  themeCssSelector: (theme) =>
+  themeCssSelector: theme =>
     theme.name === 'vitesse-dark' ? ':root.dark' : ':root:not(.dark)',
   useDarkModeMediaQuery: false,
   useStyleReset: false,
