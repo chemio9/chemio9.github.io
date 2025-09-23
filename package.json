@@ -1,7 +1,7 @@
 {
   "name": "astro-antfustyle-theme",
   "type": "module",
-  "version": "2.2.1",
+  "version": "3.0.0-beta.1",
   "private": true,
   "packageManager": "pnpm@10.16.0+sha512.8066e7b034217b700a9a4dbb3a005061d641ba130a89915213a10b3ca4919c19c037bec8066afdc559b89635fdb806b16ea673f2468fbb28aabfa13c53e3f769",
   "license": "MIT",
@@ -45,6 +45,7 @@
     "@types/p5": "^1.7.6",
     "@typescript-eslint/parser": "^8.43.0",
     "@unocss/eslint-plugin": "^66.5.1",
+    "@unocss/preset-web-fonts": "^66.5.2",
     "@unocss/reset": "66.3.3",
     "astro": "^5.13.7",
     "astro-expressive-code": "^0.41.3",
@@ -83,7 +84,7 @@
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.43.0",
     "unist-util-visit": "^5.0.0",
-    "unocss": "66.3.3",
+    "unocss": "66.5.2",
     "viewerjs": "^1.11.7"
   },
   "pnpm": {
