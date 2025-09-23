@@ -1,7 +1,7 @@
 {
   "name": "astro-antfustyle-theme",
   "type": "module",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "packageManager": "pnpm@10.17.1",
   "license": "MIT",
