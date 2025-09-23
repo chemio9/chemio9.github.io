@@ -20,12 +20,25 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: ^24.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.ASTRO_BUILD_PAT }}
+          node-version: latest
+          cache: pnpm
+          cache-dependency-path: ./pnpm.lock
+      - name: Install
+        shell: bash
+        run: pnpm install --frozen-lockfile
+      - name: Build (npm/yarn/pnpm/bun)
+        shell: bash
+        run: |
+          pnpm run build && cp -rv ./public/* dist/
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist/
 
   deploy:
     needs: build

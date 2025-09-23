@@ -60,6 +60,7 @@
     "eslint-plugin-format": "^1.0.2",
     "globals": "^16.4.0",
     "html-entities": "^2.6.0",
+    "katex": "^0.16.22",
     "lint-staged": "^15.5.2",
     "mdast-util-to-string": "^4.0.0",
     "nprogress": "^0.2.0",

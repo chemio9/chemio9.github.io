@@ -7,6 +7,7 @@ import type {
 
 import type { ProjectSchema } from '~/content/schema'
 
+import { createLocalFontProcessor } from '@unocss/preset-web-fonts/local'
 import {
   defineConfig,
   extractorSplit,
@@ -144,6 +145,8 @@ export default defineConfig({
         mono: 'DM Mono:400,600',
         condensed: 'Roboto Condensed',
       },
+
+      processors: createLocalFontProcessor(),
     }),
   ],
 
