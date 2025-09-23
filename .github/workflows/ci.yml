@@ -69,7 +69,7 @@ jobs:
         run: pnpm lint
 
       - name: 🚀 Build the project
-        run: pnpm build
+        run: pnpm build && cp -rv ./public/* ./dist/
 
       - name: ✅ Verify build output
         shell: bash
