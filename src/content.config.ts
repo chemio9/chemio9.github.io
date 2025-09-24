@@ -38,6 +38,8 @@ const releases = defineCollection({
     mode: 'repoList',
     repos: [
       'atomclub/form-next',
+      'atomclub/aicweb',
+      'chemio9/chemio9.github.io',
     ],
     monthsBack: 12,
     entryReturnType: 'byRelease',
@@ -86,7 +88,7 @@ const streams = defineCollection({
 
 const feeds = defineCollection({
   loader: feedLoader({
-    url: 'https://astro.build/rss.xml',
+    url: 'https://www.archlinuxcn.org/feed/',
   }),
 })
 

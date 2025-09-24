@@ -90,8 +90,8 @@ export const UI: Ui = {
   },
   tabbedLayoutTabs: [
     { title: 'Changelog', path: '/changelog' },
-    { title: 'AstroBlog', path: '/feeds' },
-    { title: 'AstroStreams', path: '/streams' },
+    { title: 'Arch Linux News', path: '/feeds' },
+    // { title: 'AstroStreams', path: '/streams' },
   ],
   groupView: {
     maxGroupColumns: 3,
@@ -99,7 +99,7 @@ export const UI: Ui = {
   },
   githubView: {
     monorepos: [
-      // 'withastro/astro',
+      'withastro/astro',
       // 'withastro/starlight',
       // 'lin-stephanie/astro-loaders',
     ],
