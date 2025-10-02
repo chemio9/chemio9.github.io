@@ -49,9 +49,9 @@ export const UI: Ui = {
     },
     {
       path: '/changelog',
-      title: 'Changelog',
+      title: 'Changelog/Feeds',
       displayMode: 'iconToTextOnMobile',
-      text: 'Changelog',
+      text: 'Changelog/Feeds',
       icon: 'i-ri-draft-line',
     },
   ],
@@ -90,7 +90,7 @@ export const UI: Ui = {
   },
   tabbedLayoutTabs: [
     { title: 'Changelog', path: '/changelog' },
-    { title: 'Arch Linux News', path: '/feeds' },
+    { title: 'Feeds', path: '/feeds' },
     // { title: 'AstroStreams', path: '/streams' },
   ],
   groupView: {

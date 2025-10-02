@@ -1,4 +1,4 @@
-import { feedLoader } from '@ascorbic/feed-loader'
+// import { feedLoader } from '@ascorbic/feed-loader'
 import { blueskyPostsLoader } from 'astro-loader-bluesky-posts'
 
 import { githubPrsLoader } from 'astro-loader-github-prs'
@@ -87,9 +87,9 @@ const streams = defineCollection({
 })
 
 const feeds = defineCollection({
-  loader: feedLoader({
-    url: 'https://www.archlinuxcn.org/feed/',
-  }),
+  loader: async () => {
+    return []
+  },
 })
 
 export const collections = {

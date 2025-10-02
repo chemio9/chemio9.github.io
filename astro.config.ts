@@ -33,6 +33,11 @@ export default defineConfig({
     responsiveStyles: true,
   },
   vite: {
+    preview: {
+      allowedHosts: [
+        'vite_dev_server',
+      ],
+    },
     server: {
       allowedHosts: [
         'vite_dev_server',
