@@ -1,5 +1,6 @@
 ---
 title: Migrate My Blog to Astro
+subtitle: Changes made to original theme.
 description: ""
 pubDate: 2025-09-13
 lastModDate: ''
@@ -9,7 +10,7 @@ giscus: true
 ogImage: true
 ---
 
-### Dynamic Class Extraction from `content/projects/data.json`
+### Dynamic Class Extraction from `data.json`
 
 By default, the original author uses `safelist` to ensure :link[Unocss]{#unocss/unocss} generates the
 required classes for the project icons. And this is only handled once at the build time.
@@ -33,6 +34,7 @@ export default defineConfig({
   // Astro 5 no longer pipes `src/content/**/*.{md,mdx}` through Vite
   content: {
 -    filesystem: ['./src/{content,pages}/**/*.{md,mdx}'],
++    // dev HMR
 +    pipeline: {
 +      include: [
 +        // the default
@@ -42,6 +44,11 @@ export default defineConfig({
 +      // exclude files
 +      // exclude: []
 +    },
++    // build phase
++    filesystem: [
++      './src/content/projects/data.json',
++      './src/{content,pages}/**/*.{mdx,md}',
++    ],
 +  },
 
 +  extractors: [
