@@ -1,6 +1,6 @@
 import antfu from '@antfu/eslint-config'
 
-const config = await antfu({
+const config = antfu({
   autoRenamePlugins: false,
   formatters: {
     astro: false,

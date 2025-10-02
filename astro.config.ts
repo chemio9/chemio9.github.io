@@ -1,7 +1,6 @@
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import astroExpressiveCode from 'astro-expressive-code'
-import min from 'astro-min'
 import robotsTxt from 'astro-robots-txt'
 import { defineConfig } from 'astro/config'
 import unocss from 'unocss/astro'
@@ -19,10 +18,6 @@ export default defineConfig({
     unocss({ injectReset: true }),
     astroExpressiveCode(),
     mdx(),
-    min({
-      minify_css: true,
-      minify_js: true,
-    }),
   ],
   markdown: {
     syntaxHighlight: false,
@@ -39,6 +34,9 @@ export default defineConfig({
   },
   vite: {
     server: {
+      allowedHosts: [
+        'vite_dev_server',
+      ],
       headers: {
         // Enable CORS for dev: allow Giscus iframe to load local styles
         'Access-Control-Allow-Origin': '*',
