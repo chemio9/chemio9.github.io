@@ -79,7 +79,7 @@ const webPageData = {
 <meta name="author" content={SITE.author} />
 
 <!-- Color -->
-<meta name="theme-color" content="" />
+<meta name="theme-color" content="#7a96b8" />
 <meta name="color-scheme" content="light dark" />
 
 <!-- Open Graph & Facebook -->
@@ -113,10 +113,19 @@ const webPageData = {
 <!-- Icon -->
 <link rel="icon" type="image/svg+xml" href={withBasePath('/favicon.svg')} />
 <link rel="icon" sizes="32x32" href={withBasePath('/favicon.ico')} />
+
+<link rel="icon" type="image/png" href={withBasePath('/favicon-16x16.png')} sizes="16x16" />
+<link rel="icon" type="image/png" href={withBasePath('/favicon-32x32.png')} sizes="32x32" />
+<link rel="icon" type="image/png" href={withBasePath('/favicon-48x48.png')} sizes="48x48" />
+
+<link rel="icon" type="image/png" href={withBasePath('/android-chrome-192x192.png')} sizes="192x192" />
+<link rel="icon" type="image/png" href={withBasePath('/android-chrome-512x512.png')} sizes="512x512" />
+
 <link rel="apple-touch-icon" href={withBasePath('/apple-touch-icon.png')} />
+<link rel="mask-icon" href={withBasePath('/sarafi-pinned-tab.svg')} color="#5bbad5" />
 
 <!-- Manifest -->
-<link rel="manifest" href={withBasePath('/manifest.webmanifest')} />
+<link rel="manifest" href={withBasePath('/stie.webmanifest')} />
 
 <!-- Sitemap -->
 <link rel="sitemap" href={withBasePath('/sitemap-index.xml')} />
